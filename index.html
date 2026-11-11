@@ -1,0 +1,1756 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>สตูดิโอหัวข้อวิดีโอ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&family=Prompt:wght@400;500;700&family=Mitr:wght@400;500;700&family=Sarabun:wght@400;700&family=Chonburi&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: editing-suite — clip bin | preview monitor | title inspector; stacks to one column on phones */
+:root{
+  --bg:#f3f4f7; --panel:#ffffff; --line:#dfe2e9; --ink:#1a1e27; --muted:#5d6475;
+  --accent:#d89a00; --accent-ink:#1a1400; --accent-soft:#fff3cf; --monitor:#11141a;
+  --ok:#1f8a55; --warn:#b4540b;
+  --f-display:"Kanit","Prompt",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Thai","Sarabun",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14171d; --panel:#1c2029; --line:#2d3340; --ink:#eceef3; --muted:#9aa2b3;
+  --accent:#f2b51c; --accent-ink:#1a1400; --accent-soft:#3a2f10; --monitor:#07080b;
+  --ok:#4cc488; --warn:#f0954a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171d; --panel:#1c2029; --line:#2d3340; --ink:#eceef3; --muted:#9aa2b3;
+  --accent:#f2b51c; --accent-ink:#1a1400; --accent-soft:#3a2f10; --monitor:#07080b;
+  --ok:#4cc488; --warn:#f0954a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+h1,h2{font-family:var(--f-display);font-weight:500;margin:0;text-wrap:balance}
+h1{font-size:1.6rem;letter-spacing:.01em}
+h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;max-width:1400px;margin:0 auto 16px}
+.top p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.grid{display:grid;grid-template-columns:240px minmax(0,1fr) 320px;gap:16px;max-width:1400px;margin:0 auto;align-items:start}
+@media (max-width:1050px){.grid{grid-template-columns:minmax(0,1fr) 320px}.bin{grid-column:1/-1}}
+@media (max-width:720px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+button,.btn{font:inherit;font-family:var(--f-display);font-size:.92rem;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button:hover,.btn:hover{border-color:var(--accent)}
+button:focus-visible,.btn:focus-within,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:500}
+.primary:hover{filter:brightness(1.05)}
+.btn input{position:absolute;width:1px;height:1px;opacity:0}
+.drop{border:1.5px dashed var(--line);border-radius:8px;padding:14px;text-align:center;color:var(--muted);font-size:.88rem}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.clips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:460px;overflow:auto}
+@media (max-width:1050px){.clips{flex-direction:row;overflow-x:auto;max-height:none}.clips li{flex:0 0 200px}}
+.clips li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px;align-items:center;padding:6px;border-radius:7px;border:1px solid transparent;cursor:pointer}
+.clips li.on{border-color:var(--accent);background:var(--accent-soft)}
+.clips img,.clips .ph{width:56px;height:36px;object-fit:cover;border-radius:4px;background:var(--monitor);display:block}
+.clips .nm{font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clips .st{font-size:.74rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.pill{font-size:.7rem;padding:1px 7px;border-radius:99px;background:var(--line);color:var(--ink)}
+.pill.ok{background:var(--ok);color:#fff}.pill.run{background:var(--accent);color:var(--accent-ink)}
+.bar{height:3px;background:var(--line);border-radius:2px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);width:0}
+.monitor{background:var(--monitor);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:10px}
+.stage{position:relative;overflow:hidden;display:flex;justify-content:center;touch-action:none;border-radius:4px}
+#zoomReset{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:6px 12px;font:500 .8rem var(--f-display);cursor:pointer}
+canvas#view{transform-origin:center center;width:auto;max-width:100%;height:auto;max-height:74vh;margin:0 auto;display:block;border-radius:4px;touch-action:none;cursor:grab;background:#000}
+canvas#view.drag{cursor:grabbing}
+.transport{display:flex;gap:10px;align-items:center;color:#c9ced8;font-size:.8rem;font-variant-numeric:tabular-nums}
+.transport button{background:#222733;border-color:#333a48;color:#eceef3;padding:6px 10px}
+.transport input{flex:1;min-width:0;accent-color:var(--accent)}
+.tl{position:relative;flex:1;min-width:0;height:30px;cursor:pointer;touch-action:none;user-select:none}
+.tl-track{position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:#3a4150}
+.tl-keep{position:absolute;top:10px;height:10px;background:rgba(242,181,28,.35);border-top:2px solid #f2b51c;border-bottom:2px solid #f2b51c;box-sizing:border-box}
+.tl-play{position:absolute;top:12px;height:6px;left:0;background:#f2b51c;border-radius:3px 0 0 3px;opacity:.9}
+.tl-head{position:absolute;top:4px;width:2px;height:22px;background:#fff;margin-left:-1px;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.tl-h{position:absolute;top:2px;width:14px;height:26px;margin-left:-7px;background:#f2b51c;border-radius:4px;cursor:ew-resize;display:flex;align-items:center;justify-content:center;color:#1a1400;font:700 12px/1 var(--f-display);box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.tl-h:hover,.tl-h.drag{background:#ffd34d}
+.trimbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.78rem;color:#c9ced8}
+.trimbar button{background:#222733;border:1px solid #333a48;color:#eceef3;border-radius:6px;padding:4px 9px;font:500 .78rem var(--f-display);cursor:pointer}
+.trimbar button:hover{border-color:#f2b51c}
+.trimbar span{font-variant-numeric:tabular-nums}
+.hint{font-size:.8rem;color:var(--muted)}
+.monitor .hint{color:#9aa2b3}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label,.lab{font-size:.8rem;color:var(--muted)}
+textarea,select,input[type=number]{font:inherit;width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 10px}
+textarea{font-family:var(--f-display);font-size:.92rem;line-height:1.35;resize:vertical;min-height:0;padding:6px 8px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row > .field{flex:1;min-width:110px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=color]{width:38px;height:32px;padding:0;border:1px solid var(--line);border-radius:6px;background:none;cursor:pointer}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw .sep{width:1px;align-self:stretch;background:var(--line);margin:0 2px}
+.sw .rlab{font-size:.7rem;color:var(--muted);align-self:center;width:100%;margin-top:2px}
+.sw button{width:26px;height:26px;padding:0;border-radius:50%;border:2px solid var(--line)}
+.seg{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{border:0;border-radius:0;flex:1;padding:6px 8px;font-size:.82rem}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.check{display:flex;gap:8px;align-items:center;font-size:.88rem;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.pos{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:120px}
+.pos button{padding:0;height:24px;font-size:.7rem}
+hr{border:0;border-top:1px solid var(--line);margin:2px 0;width:100%}
+.out{display:flex;flex-direction:column;gap:8px}
+.lv{font-family:var(--f-display);font-weight:500;font-variant-numeric:tabular-nums}
+.preset{display:flex;flex-direction:column;gap:6px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+input[type=text]{font:inherit;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:5px 8px}
+.undo{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.undo button{border:0;border-radius:0}
+.undo button+button{border-left:1px solid var(--line)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.tabs button{padding:7px 6px;font-size:.86rem}
+.tabs button i{width:10px;height:10px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+.tabs button.on{border-color:var(--accent);background:var(--accent-soft);font-weight:500}
+.tabs button.off{opacity:.55}
+.dest{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border:1.5px dashed var(--line);border-radius:8px}
+.dest[data-s="ok"]{border-style:solid;border-color:var(--ok)}
+.dest[data-s="err"]{border-color:var(--warn)}
+.dest .ico{font-size:1.4rem}
+.dest .dtext{display:flex;flex-direction:column;min-width:0}
+.dest b{font-family:var(--f-display);font-weight:500;overflow-wrap:anywhere;line-height:1.3}
+.dest small{color:var(--muted);font-size:.76rem;line-height:1.35}
+.danger{background:var(--warn);border-color:var(--warn);color:#fff;font-weight:500}
+.panel.settings{gap:8px;padding:12px;font-size:13.5px}
+.panel.settings > *{flex-shrink:0}
+.panel.settings hr{margin:0}
+.panel.settings .field{gap:3px}
+.panel.settings .row{gap:8px}
+.panel.settings button{padding:5px 9px;font-size:.84rem}
+.panel.settings .tabs button{padding:5px 2px;font-size:.8rem}
+.panel.settings .seg button{padding:5px 6px;font-size:.8rem}
+.panel.settings .check{font-size:.84rem;gap:6px}
+.panel.settings .sw button{width:22px;height:22px}
+.panel.settings input[type=color]{width:30px;height:26px}
+.panel.settings select{padding:5px 8px}
+.panel.settings .pos button{height:20px}
+.panel.settings h2{font-size:.74rem}
+.panel.settings .hint{font-size:.74rem}
+.panel.settings{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:var(--accent) var(--line)}
+.panel.settings::-webkit-scrollbar{width:14px}
+.panel.settings::-webkit-scrollbar-track{background:var(--line);border-radius:8px}
+.panel.settings::-webkit-scrollbar-thumb{background:var(--accent);border-radius:8px;border:3px solid var(--line)}
+.monitor{position:sticky;top:12px}
+@media (max-width:720px){.panel.settings,.monitor{position:static;max-height:none;overflow:visible}}
+/* ---------- phone layout: video pinned on top, settings in tabs, tab bar at the bottom ---------- */
+.mtabs{display:none}
+@media (max-width:720px){
+  body{padding-block:8px calc(70px + env(safe-area-inset-bottom, 0px))}
+  .top{margin-bottom:8px;align-items:center}
+  .top h1{font-size:1.15rem}
+  .top p{display:none}
+  .top .btn,.top .undo button{padding:7px 10px;font-size:.84rem}
+  .grid{gap:10px}
+  .monitor{order:-1;position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px)));border-radius:0;padding:8px 10px;gap:6px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+  canvas#view{max-height:38vh}
+  .monitor > .hint{display:none}
+  .trimbar{gap:4px}
+  .trimbar span{flex-basis:100%;font-size:.72rem}
+  .tl{height:36px}
+  .tl-h{width:20px;height:32px;margin-left:-10px;top:2px}
+  .bin{padding:10px;gap:6px}
+  .bin h2,.bin .drop{display:none}
+  .bin.m-off{display:none}
+  .panel.settings{padding:12px;font-size:15px}
+  .panel.settings > .m-off{display:none !important}
+  .panel.settings button{padding:8px 12px;font-size:.9rem}
+  .panel.settings .tabs button{padding:8px 2px;font-size:.86rem}
+  .panel.settings .sw button{width:30px;height:30px}
+  .panel.settings input[type=range]{height:28px}
+  .panel.settings hr{display:none}
+  /* bigger touch targets for fingers */
+  .panel.settings .check{min-height:46px;gap:12px;font-size:1rem;padding:4px 0}
+  .panel.settings .check input,.panel.settings input[type=checkbox]{width:28px;height:28px;flex:none}
+  .panel.settings label.check[style*="padding-left"]{padding-left:40px !important}
+  .panel.settings .seg button,.panel.settings .tabs button,.panel.settings .row > button,.panel.settings .preset button{min-height:44px;font-size:.95rem}
+  .panel.settings select,.panel.settings input[type=text],.panel.settings textarea{min-height:44px;font-size:16px}
+  .panel.settings .sw{gap:10px}
+  .panel.settings .sw button{width:38px;height:38px}
+  .panel.settings input[type=color]{width:44px;height:38px}
+  .panel.settings .pos{width:100%;max-width:240px;gap:6px}
+  .panel.settings .pos button{height:40px;font-size:1rem}
+  .panel.settings input[type=range]{height:40px;-webkit-appearance:none;appearance:none;background:transparent}
+  .panel.settings input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--line)}
+  .panel.settings input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--accent);margin-top:-11px;border:3px solid var(--panel);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+  .panel.settings input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:var(--line)}
+  .panel.settings input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--accent);border:3px solid var(--panel)}
+  .panel.settings .field label,.panel.settings .lab{font-size:.9rem}
+  .trimbar button{min-height:40px;padding:6px 12px;font-size:.85rem}
+  .transport button{min-width:44px;min-height:40px}
+  .mtabs button{min-height:52px;font-size:.8rem}
+  .mtabs button i{font-size:1.4rem}
+  .mtabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--line);
+    padding:6px max(6px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(6px, env(safe-area-inset-left, 0px));box-shadow:0 -4px 14px rgba(0,0,0,.12)}
+  .mtabs button{border:0;background:none;color:var(--muted);font:500 .74rem var(--f-display);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;border-radius:8px}
+  .mtabs button i{font-style:normal;font-size:1.25rem;line-height:1}
+  .mtabs button.on{color:var(--ink);background:var(--accent-soft)}
+}
+.msg{font-size:.84rem;padding:8px 10px;border-radius:7px;background:var(--accent-soft)}
+.msg[data-k="err"]{color:var(--warn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div>
+    <h1>สตูดิโอหัวข้อวิดีโอ</h1>
+    <p>ใส่หลายวิดีโอ พิมพ์หัวข้อ 2–3 บรรทัด ลากย้ายบนจอ เลือกสีตัวอักษรและพื้นหลัง แล้วส่งออกทีเดียวทุกคลิป</p>
+  </div>
+  <div class="row" style="gap:8px">
+  <div class="undo" role="group" aria-label="ย้อนกลับ / ทำซ้ำ">
+    <button id="undo" type="button" title="ย้อนกลับ (Ctrl+Z)" disabled>↶ ย้อนกลับ</button>
+    <button id="redo" type="button" title="ทำซ้ำ (Ctrl+Y)" disabled>ทำซ้ำ ↷</button>
+  </div>
+  <label class="btn primary" for="pick">＋ เพิ่มวิดีโอ<input id="pick" type="file" accept="video/*" multiple></label>
+  </div>
+</header>
+
+<main class="grid">
+  <section class="panel bin" aria-label="รายการวิดีโอ">
+    <h2>วิดีโอของคุณ</h2>
+    <div class="drop" id="drop">ลากไฟล์วิดีโอมาวางที่นี่<br>หรือกด “เพิ่มวิดีโอ”</div>
+    <ul class="clips" id="clips"></ul>
+    <button id="clearClips" type="button" hidden>ล้างรายการวิดีโอ</button>
+  </section>
+
+  <section class="monitor" aria-label="ตัวอย่าง">
+    <div class="stage" id="stage"><canvas id="view" width="1280" height="720"></canvas><button id="zoomReset" type="button" hidden>⤢ 1x</button></div>
+    <div class="transport">
+      <button id="play" aria-label="เล่น/หยุด">▶</button>
+      <div class="tl" id="tl" aria-label="แถบเวลา ลากที่จับสีเหลืองเพื่อตัดหัว-ท้าย">
+        <div class="tl-track"></div><div class="tl-keep" id="tlKeep"></div><div class="tl-play" id="tlPlay"></div>
+        <div class="tl-head" id="tlHead"></div>
+        <div class="tl-h" id="hIn" title="ลากเพื่อตัดหัว"><span>[</span></div><div class="tl-h" id="hOut" title="ลากเพื่อตัดท้าย"><span>]</span></div>
+      </div>
+      <span id="time">0:00 / 0:00</span>
+    </div>
+    <div class="trimbar">
+      <button id="setIn" type="button">⇤ ตัดหัวตรงนี้</button>
+      <button id="setOut" type="button">ตัดท้ายตรงนี้ ⇥</button>
+      <button id="trimReset" type="button">ไม่ตัด</button>
+      <span id="trimInfo">ลากที่จับสีเหลืองบนแถบเวลา เพื่อตัดหัว-ท้าย</span>
+    </div>
+    <div class="hint" id="mhint">ตัวอย่างจำลอง — เพิ่มวิดีโอเพื่อดูของจริง · ลากกล่องหัวข้อเพื่อย้ายตำแหน่ง</div>
+  </section>
+
+  <section class="panel settings" aria-label="ตั้งค่าหัวข้อ">
+    <h2>ชุดตั้งค่าของฉัน (Preset)</h2>
+    <div class="preset">
+      <div class="row"><select id="presetSel" aria-label="ชุดตั้งค่าที่บันทึกไว้" style="flex:1;min-width:0"><option value="">— ยังไม่มีชุดที่บันทึก —</option></select>
+        <button id="presetLoad" class="primary">ใช้ชุดนี้</button><button id="presetDel" title="ลบชุดนี้">ลบ</button></div>
+      <div class="row"><input id="presetName" type="text" placeholder="ตั้งชื่อชุด เช่น รีวิวโซล่าเซลล์" maxlength="40" style="flex:1;min-width:0">
+        <button id="presetSave">บันทึกชุด</button></div>
+      <label class="check"><input id="presetTexts" type="checkbox" checked> บันทึกข้อความทั้ง 4 กล่องด้วย</label>
+      <div class="row"><button id="presetExport" type="button">⇪ ส่งออกไฟล์ชุดตั้งค่า</button><label class="btn" for="presetImport">⇩ นำเข้าไฟล์ชุดตั้งค่า<input id="presetImport" type="file" accept=".json,application/json"></label></div>
+      <button id="resetAll" type="button">↺ ล้างการตั้งค่าทั้งหมด (เริ่มวิดีโอใหม่)</button>
+      <span class="hint" id="presetMsg">บันทึกสี ฟอนต์ ตำแหน่งกล่อง และการแต่งภาพ/เสียงทั้งหมดไว้ใช้ซ้ำ</span>
+    </div>
+
+    <hr>
+    <h2>รูปแบบวิดีโอ</h2>
+    <div class="seg" role="group" aria-label="สัดส่วน" id="ratio">
+      <button data-r="9:16">แนวตั้ง 9:16</button><button data-r="1:1">จัตุรัส 1:1</button><button data-r="orig">ตามต้นฉบับ</button>
+    </div>
+    <div class="seg" role="group" aria-label="การจัดภาพ" id="fit">
+      <button data-f="cover">เต็มจอ (ตัดขอบ)</button><button data-f="blur">ภาพเต็ม + พื้นเบลอ</button>
+    </div>
+    <label class="check"><input id="mirror" type="checkbox"> กลับด้านภาพ (คลิปกล้องหน้า)</label>
+    <label class="check" style="padding-left:24px"><input id="mirrorAll" type="checkbox"> ใช้กับทุกวิดีโอ</label>
+    <label class="check"><input id="safe" type="checkbox" checked> แสดงเขตที่ปุ่ม TikTok บัง</label>
+
+    <hr>
+    <h2>กล่องข้อความ</h2>
+    <div class="tabs" role="tablist" id="tabs">
+      <button role="tab" data-b="0" class="on"><i></i>กล่อง 1</button>
+      <button role="tab" data-b="1"><i></i>กล่อง 2</button>
+      <button role="tab" data-b="2"><i></i>กล่อง 3</button>
+      <button role="tab" data-b="3"><i></i>กล่อง 4</button>
+    </div>
+    <label class="check"><input id="on" type="checkbox" checked> แสดงกล่องนี้ในวิดีโอ</label>
+    <div class="field">
+      <label for="txt">ข้อความ (สูงสุด 3 บรรทัด)</label>
+      <textarea id="txt" rows="2"></textarea>
+    </div>
+    <label class="check"><input id="same" type="checkbox"> ใช้ข้อความเดียวกันทุกวิดีโอ</label>
+
+    <hr>
+    <div class="row">
+      <div class="field"><label for="font">ฟอนต์</label>
+        <select id="font">
+          <option value="Kanit">Kanit</option><option value="Prompt">Prompt</option>
+          <option value="Mitr">Mitr</option><option value="Sarabun">Sarabun</option>
+          <option value="Chonburi">Chonburi</option>
+        </select></div>
+      <div class="field"><label for="size">ขนาด</label><input id="size" type="range" min="2" max="25" step="0.5" value="7"></div>
+    </div>
+    <div class="row">
+      <div class="seg" role="group" aria-label="จัดแนว" id="align">
+        <button data-al="left">ซ้าย</button><button data-al="center" class="on">กลาง</button><button data-al="right">ขวา</button>
+      </div>
+      <label class="check"><input id="bold" type="checkbox" checked> ตัวหนา</label>
+    </div>
+
+    <div class="field">
+      <span class="lab">สีตัวอักษร</span>
+      <div class="row"><input id="color" type="color" value="#ffffff" aria-label="สีตัวอักษร"><div class="sw" data-for="color"></div></div>
+    </div>
+    <label class="check"><input id="stroke" type="checkbox"> ขอบตัวอักษร</label>
+    <div class="field" id="strokeRow" hidden><span class="lab">สีขอบตัวอักษร</span><div class="row"><input id="strokeColor" type="color" value="#000000" aria-label="สีขอบ"><div class="sw" data-for="strokeColor"></div></div></div>
+
+    <hr>
+    <label class="check"><input id="bg" type="checkbox" checked> พื้นหลังตัวอักษร</label>
+    <div id="bgBox" class="out">
+      <div class="row"><input id="bgColor" type="color" value="#d89a00" aria-label="สีพื้นหลัง"><div class="sw" data-for="bgColor"></div></div>
+      <div class="row">
+        <div class="field"><label for="bgOp">ความทึบ</label><input id="bgOp" type="range" min="10" max="100" value="90"></div>
+        <div class="field"><label for="radius">ความมน</label><input id="radius" type="range" min="0" max="40" value="14"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="padX">ขนาดพื้นหลัง ซ้าย-ขวา</label><input id="padX" type="range" min="0" max="400" step="5" value="100"></div>
+        <div class="field"><label for="padY">ขนาดพื้นหลัง บน-ล่าง</label><input id="padY" type="range" min="0" max="400" step="5" value="100"></div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row" style="align-items:flex-start">
+      <div class="field"><span class="lab">วางตำแหน่งด่วน</span>
+        <div class="pos" id="pos">
+          <button data-p="0.2,0.12">↖</button><button data-p="0.5,0.12">↑</button><button data-p="0.8,0.12">↗</button>
+          <button data-p="0.2,0.5">←</button><button data-p="0.5,0.5">•</button><button data-p="0.8,0.5">→</button>
+          <button data-p="0.2,0.86">↙</button><button data-p="0.5,0.86">↓</button><button data-p="0.8,0.86">↘</button>
+        </div></div>
+      <p class="hint" style="flex:1;min-width:120px;margin:18px 0 0">แต่ละกล่องมีสีและตำแหน่งของตัวเอง ใช้เหมือนกันทุกวิดีโอ ส่วนข้อความแยกแต่ละคลิปได้</p>
+    </div>
+
+    <hr>
+    <h2>เสียง ความสวย และตัดต่อ</h2>
+    <label class="check"><input id="boostOn" type="checkbox"> ขยายเสียงให้ดังขึ้น</label>
+    <div class="field" id="boostBox" hidden>
+      <div class="row" style="justify-content:space-between"><label for="boost">ระดับเสียง</label><b id="boostVal" class="lv">200%</b></div>
+      <input id="boost" type="range" min="100" max="400" step="10" value="200">
+      <span class="hint">มีตัวกันเสียงแตกให้อัตโนมัติ กด ▶ ที่จอตัวอย่างเพื่อฟังก่อนส่งออก</span>
+    </div>
+    <label class="check"><input id="beautyOn" type="checkbox"> โหมดบิวตี้ (ผิวเนียน หน้าใส)</label>
+    <div id="beautyBox" class="out" hidden>
+      <div class="field">
+        <div class="row" style="justify-content:space-between"><label for="smooth">ผิวเนียน</label><b id="smoothVal" class="lv">50</b></div>
+        <input id="smooth" type="range" min="0" max="100" value="50">
+      </div>
+      <div class="field">
+        <div class="row" style="justify-content:space-between"><label for="bright">หน้าใส</label><b id="brightVal" class="lv">30</b></div>
+        <input id="bright" type="range" min="0" max="100" value="30">
+      </div>
+      <div class="row"><button id="compare" type="button" class="cmpBtn">กดค้างเพื่อดูภาพก่อนแต่ง</button><button id="skinView" type="button">กดค้างดูส่วนที่จับเป็นผิว</button></div>
+    </div>
+    <label class="check"><input id="teethOn" type="checkbox"> ฟันขาว</label>
+    <div class="field" id="teethBox" hidden>
+      <div class="row" style="justify-content:space-between"><label for="teeth">ความขาว</label><b id="teethVal" class="lv">60</b></div>
+      <input id="teeth" type="range" min="10" max="100" value="60">
+      <span class="hint" id="teethInfo"></span>
+    </div>
+    <label class="check"><input id="adjOn" type="checkbox"> ปรับแสงและความคมชัด</label>
+    <div id="adjBox" class="out" hidden>
+      <div class="field"><div class="row" style="justify-content:space-between"><label for="exposure">Exposure (ค่าแสง)</label><b id="exposureVal" class="lv">0</b></div>
+        <input id="exposure" type="range" min="-2" max="2" step="0.1" value="0"></div>
+      <div class="field"><div class="row" style="justify-content:space-between"><label for="brightness">ความสว่าง</label><b id="brightnessVal" class="lv">0</b></div>
+        <input id="brightness" type="range" min="-50" max="50" step="1" value="0"></div>
+      <div class="field"><div class="row" style="justify-content:space-between"><label for="contrast">คอนทราสต์</label><b id="contrastVal" class="lv">0</b></div>
+        <input id="contrast" type="range" min="-50" max="50" step="1" value="0"></div>
+      <div class="field"><div class="row" style="justify-content:space-between"><label for="sharpness">ความคมชัด</label><b id="sharpnessVal" class="lv">0</b></div>
+        <input id="sharpness" type="range" min="0" max="100" step="1" value="0"></div>
+      <div class="row"><button type="button" class="cmpBtn">กดค้างเพื่อดูภาพก่อนแต่ง</button><button type="button" id="adjReset">คืนค่าเริ่มต้น</button></div>
+    </div>
+    <label class="check"><input id="cutOn" type="checkbox"> ใช้โหมดตัดช่วงเงียบ (Dead air)</label>
+    <div class="field" id="cutBox" hidden>
+      <div class="row" style="justify-content:space-between"><label for="cutMin">ตัดเมื่อเงียบนานเกิน</label><b id="cutMinVal" class="lv">0.7 วิ</b></div>
+      <input id="cutMin" type="range" min="0.3" max="2" step="0.1" value="0.7">
+      <span class="hint" id="cutInfo">เลือกคลิปเพื่อดูว่าจะตัดออกกี่วินาที</span>
+    </div>
+
+    <hr>
+    <h2>ส่งออก</h2>
+    <div class="field">
+      <span class="lab">โฟลเดอร์ปลายทาง</span>
+      <div class="dest" id="dest" data-s="none">
+        <span class="ico" aria-hidden="true">📁</span>
+        <div class="dtext"><b id="folderName">ยังไม่ได้เลือกโฟลเดอร์</b><small id="folderSub">กดปุ่มด้านขวาเพื่อเลือกว่าจะเก็บวิดีโอไว้ที่ไหน</small></div>
+        <button id="folder">เลือก</button>
+      </div>
+      <button id="openFolder" hidden>เปิดโฟลเดอร์ใน Windows</button>
+      <div class="msg" id="folderNote" hidden><span id="folderNoteText"></span><div class="row" id="folderAlt" hidden style="margin-top:8px"><button id="useDl">ใช้โฟลเดอร์ดาวน์โหลดของเบราว์เซอร์แทน</button></div></div>
+    </div>
+    <div class="row">
+      <button id="expOne" class="primary" disabled>ส่งออกคลิปนี้</button>
+      <button id="expAll" disabled>ส่งออกทั้งหมด</button>
+      <button id="cancel" class="danger" hidden>■ ยกเลิก</button>
+      <button id="saveAll" class="primary" hidden>บันทึกทั้งหมด</button>
+    </div>
+    <div class="msg" id="msg" hidden></div>
+    <p class="hint" id="expHint">ส่งออกด้วยการ์ดจอ (โหมดเร็ว) ถ้าเครื่องไม่รองรับจะสลับเป็นโหมดเล่นตามเวลาจริงให้เอง เปิดแท็บนี้ค้างไว้ระหว่างทำ</p>
+  </section>
+</main>
+<nav class="mtabs" id="mtabs" aria-label="เมนู">
+  <button data-mt="text" class="on"><i>Aa</i>ข้อความ</button>
+  <button data-mt="look"><i>✨</i>แต่ง</button>
+  <button data-mt="format"><i>▭</i>รูปแบบ</button>
+  <button data-mt="clips"><i>🎞</i>คลิป/ชุด</button>
+  <button data-mt="export"><i>⬇</i>ส่งออก</button>
+</nav>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const view = $('#view'), vctx = view.getContext('2d');
+const pv = document.createElement('video'); pv.playsInline = true; pv.preload = 'auto';
+const items = []; let cur = -1, sel = 0, dragging = null, hoverIdx = -1, dl = null, actx = null, busy = false;
+
+const mk = (o) => Object.assign({padX:100,padY:100,on:true,font:'Kanit',size:7,bold:true,align:'center',color:'#ffffff',stroke:false,strokeColor:'#000000',
+  bg:true,bgColor:'#d89a00',bgOp:90,radius:14,x:0.5,y:0.12}, o);
+let boxes = [
+  mk({size:8,color:'#111111',bgColor:'#ffd400',y:0.16}),
+  mk({on:false,size:5.5,bold:false,bgColor:'#111111',bgOp:75,y:0.27}),
+  mk({on:false,size:6,bgColor:'#e0245e',y:0.66}),
+  mk({on:false,size:5.5,color:'#111111',bgColor:'#ffffff',y:0.45})
+];
+let shared = ['EP.1 เริ่มต้นใช้งาน\nเทคนิคที่ใช้ได้จริง', 'ช่องของฉัน', 'กดติดตาม', 'ข้อความกล่อง 4'];
+const DEF_BOXES = JSON.stringify(boxes), DEF_SHARED = JSON.stringify(shared);
+try { const s = JSON.parse(localStorage.getItem('vts-boxes4')||'null'); if (Array.isArray(s) && s.length===4) boxes = s.map(b => mk(b)); } catch(e){}
+try { const t = JSON.parse(localStorage.getItem('vts-texts')||'null'); if (Array.isArray(t)) t.slice(0,4).forEach((v,i) => shared[i] = v); } catch(e){}
+let frame = {ratio:'9:16', fit:'blur', safe:true, boostOn:false, boost:200, beautyOn:false, smooth:50, bright:30, cutOn:false, cutMin:0.7, teethOn:false, teeth:60, adjOn:false, exposure:0, brightness:0, contrast:0, sharpness:0};
+let comparing = false;
+const DEF_FRAME = JSON.stringify(frame);
+try { const f = JSON.parse(localStorage.getItem('vts-frame')||'null'); if (f) Object.assign(frame, f); } catch(e){}
+const save = () => { try { localStorage.setItem('vts-frame', JSON.stringify(frame)); } catch(e){} try { localStorage.setItem('vts-boxes4', JSON.stringify(boxes)); localStorage.setItem('vts-texts', JSON.stringify(shared)); } catch(e){} };
+const B = () => boxes[sel];
+const textsOf = () => cur >= 0 ? items[cur].texts : shared;
+
+/* ---------- drawing ---------- */
+function layout(ctx, w, h, text, st){
+  const lines = (text||'').split('\n').slice(0,3);
+  while (lines.length && !lines[lines.length-1].trim()) lines.pop();
+  if (!lines.length) return null;
+  const px = Math.round(st.size/100*Math.min(w,h));
+  ctx.font = `${st.bold?700:500} ${px}px "${st.font}", "Kanit", sans-serif`;
+  const lh = px*1.32, sx = px*0.495*(st.padX ?? 100)/100, sy = px*0.2475*(st.padY ?? 100)/100;
+  const bw = Math.max(...lines.map(l => ctx.measureText(l).width)) + sx*2, bh = lines.length*lh + sy*2;
+  let x = st.x*w - bw/2, y = st.y*h - bh/2;
+  x = Math.max(0, Math.min(w-bw, x)); y = Math.max(0, Math.min(h-bh, y));
+  return {lines,px,lh,sx,sy,x,y,w:bw,h:bh};
+}
+function dims(vw, vh){
+  if (frame.ratio==='9:16') return [1080,1920];
+  if (frame.ratio==='1:1') return [1080,1080];
+  const sc = Math.min(1, 1920/Math.max(vw,vh)); return [Math.round(vw*sc/2)*2 || 1280, Math.round(vh*sc/2)*2 || 720];
+}
+function drawVideo(ctx, v, W, H, flip){
+  if (flip){ ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1); drawVideo(ctx, v, W, H, false); ctx.restore(); return; }
+  const vw = v.videoWidth || v.width, vh = v.videoHeight || v.height; if (!vw) return;
+  const cover = Math.max(W/vw, H/vh), contain = Math.min(W/vw, H/vh);
+  const plain = s => ctx.drawImage(v, (W-vw*s)/2, (H-vh*s)/2, vw*s, vh*s);
+  const put = s => {
+    const src = ((frame.beautyOn || frame.adjOn || frame.teethOn) && !comparing) ? beautify(v, ctx) : v;
+    ctx.drawImage(src, (W-vw*s)/2, (H-vh*s)/2, vw*s, vh*s);
+  };
+  if (frame.fit==='cover' || Math.abs(cover-contain) < 0.01){ put(cover); return; }
+  ctx.save(); ctx.filter = 'blur(40px) brightness(0.6)'; plain(cover*1.1); ctx.restore();
+  put(contain);
+}
+/* ---------- beauty: skin-only, edge-preserving smoothing on the GPU ---------- */
+const BEAUTY_FS = `
+precision mediump float;
+uniform sampler2D u_tex; uniform vec2 u_px; uniform float u_rad; uniform float u_smooth; uniform float u_bright; uniform float u_show;
+uniform float u_exp; uniform float u_bri; uniform float u_con; uniform float u_sharp;
+uniform vec2 u_mouth[20]; uniform float u_teeth;
+varying vec2 v_uv;
+float skin(vec3 c){
+  float y  = dot(c, vec3(0.299, 0.587, 0.114));
+  float cb = 0.5 - 0.168736*c.r - 0.331264*c.g + 0.5*c.b;
+  float cr = 0.5 + 0.5*c.r - 0.418688*c.g - 0.081312*c.b;
+  float a = smoothstep(0.27, 0.32, cb) * (1.0 - smoothstep(0.49, 0.53, cb));
+  float b = smoothstep(0.52, 0.56, cr) * (1.0 - smoothstep(0.66, 0.71, cr));
+  float l = smoothstep(0.10, 0.22, y) * (1.0 - smoothstep(0.95, 1.0, y));
+  return a * b * l;
+}
+float inMouth(vec2 p){
+  bool c = false; vec2 b = u_mouth[19];
+  for (int i = 0; i < 20; i++) {
+    vec2 a = u_mouth[i];
+    if (((a.y > p.y) != (b.y > p.y)) && (p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y + 1e-6) + a.x)) c = !c;
+    b = a;
+  }
+  return c ? 1.0 : 0.0;
+}
+vec3 adjust(vec3 o, vec3 c){
+  if (u_sharp > 0.001) {
+    vec3 n = texture2D(u_tex, v_uv + vec2(u_px.x, 0.0)).rgb + texture2D(u_tex, v_uv - vec2(u_px.x, 0.0)).rgb
+           + texture2D(u_tex, v_uv + vec2(0.0, u_px.y)).rgb + texture2D(u_tex, v_uv - vec2(0.0, u_px.y)).rgb;
+    o += (c - n * 0.25) * u_sharp;
+  }
+  if (u_exp > 1.0) { vec3 e = o * u_exp; o = mix(e, 1.0 - (1.0 - o) / u_exp, smoothstep(0.55, 1.0, o)); } else { o *= u_exp; }
+  o += u_bri;
+  o = (o - 0.5) * u_con + 0.5;
+  return clamp(o, 0.0, 1.0);
+}
+void main(){
+  vec3 c = texture2D(u_tex, v_uv).rgb;
+  float m = (u_smooth + u_bright < 0.01 && u_show < 0.5) ? 0.0 : skin(c);
+  vec3 o = c;
+  if (m > 0.01) {
+    vec3 sum = vec3(0.0); float ws = 0.0;
+    for (int i = -2; i <= 2; i++) {
+      for (int j = -2; j <= 2; j++) {
+        vec2 off = vec2(float(i), float(j)) * u_px * u_rad;
+        vec3 sm = texture2D(u_tex, v_uv + off).rgb;
+        vec3 d = sm - c;
+        float w = exp(-float(i*i + j*j) / 4.5) * exp(-dot(d, d) / 0.010);
+        sum += sm * w; ws += w;
+      }
+    }
+    vec3 blur = sum / ws;
+    m = clamp(min(m, skin(blur) * 1.3), 0.0, 1.0);
+    o = mix(c, blur, m * u_smooth);
+    vec3 lit = 1.0 - (1.0 - o) * (1.0 - o * 0.45);
+    o = mix(o, lit, m * u_bright);
+  }
+  if (u_teeth > 0.001 && inMouth(v_uv) > 0.5) {
+    float lum = dot(o, vec3(0.299, 0.587, 0.114));
+    float t = smoothstep(0.28, 0.48, lum) * smoothstep(0.68, 0.84, o.g / max(o.r, 0.001));
+    vec3 white = vec3(min(1.0, lum * (1.0 + 0.22 * u_teeth) + 0.04 * u_teeth)) * vec3(0.985, 1.0, 1.02);
+    o = mix(o, clamp(white, 0.0, 1.0), t * min(1.0, u_teeth * 1.1));
+  }
+  o = adjust(o, c);
+  if (u_show > 0.5) o = mix(o * 0.35, vec3(1.0, 0.25, 0.55), m * 0.75);
+  gl_FragColor = vec4(o, 1.0);
+}`;
+let showSkin = false, beautyWarned = false;
+function makeBeauty(){
+  const cv = document.createElement('canvas');
+  const gl = cv.getContext('webgl', {preserveDrawingBuffer: true, premultipliedAlpha: false});
+  if (!gl) return null;
+  const sh = (t, src) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 p; varying vec2 v_uv; void main(){ v_uv = vec2(p.x*0.5+0.5, 0.5-p.y*0.5); gl_Position = vec4(p,0.0,1.0); }'));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, BEAUTY_FS));
+  gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+  gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+  [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+  const u = n => gl.getUniformLocation(pr, n);
+  const U = {px:u('u_px'), rad:u('u_rad'), smooth:u('u_smooth'), bright:u('u_bright'), show:u('u_show'), exp:u('u_exp'), bri:u('u_bri'), con:u('u_con'), sharp:u('u_sharp'), mouth:u('u_mouth[0]'), teeth:u('u_teeth')};
+  return { cv, run(v, maxSide, mouth){
+    const vw = v.videoWidth || v.width, vh = v.videoHeight || v.height;
+    const sc = Math.min(1, maxSide / Math.max(vw, vh)), w = Math.round(vw*sc), h = Math.round(vh*sc);
+    if (cv.width !== w || cv.height !== h){ cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, v);
+    const bOn = frame.beautyOn, aOn = frame.adjOn, k = bOn ? frame.smooth/100 : 0;
+    gl.uniform2f(U.px, 1/w, 1/h);
+    gl.uniform1f(U.rad, Math.max(1, Math.max(w,h)/1080 * (1.5 + 3.2*k)));
+    gl.uniform1f(U.smooth, Math.min(1, k*1.1)); gl.uniform1f(U.bright, bOn ? frame.bright/100 * 0.8 : 0);
+    gl.uniform1f(U.exp, aOn ? Math.pow(2, frame.exposure / 2.2) : 1);
+    gl.uniform1f(U.bri, aOn ? frame.brightness/100 * 0.4 : 0);
+    gl.uniform1f(U.con, aOn ? 1 + frame.contrast/100 : 1);
+    gl.uniform1f(U.sharp, aOn ? frame.sharpness/100 * 2.0 * Math.max(1, Math.max(w,h)/1080) : 0);
+    gl.uniform1f(U.show, showSkin ? 1 : 0);
+    if (mouth){ gl.uniform2fv(U.mouth, mouth); gl.uniform1f(U.teeth, frame.teeth/100); } else gl.uniform1f(U.teeth, 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    return cv;
+  }};
+}
+/* ---------- teeth: find the mouth with MediaPipe Face Landmarker ---------- */
+const MP_VER = '0.10.14';
+const INNER_LIPS = [78,191,80,81,82,13,312,311,310,415,308,324,318,402,317,14,87,178,88,95];
+let mpFiles = null, lmState = 'idle', lmTs = 0;
+const landmarkers = new WeakMap();
+async function loadFaceModel(){
+  if (lmState === 'loading' || lmState === 'ready') return;
+  lmState = 'loading'; teethStatus();
+  try {
+    const mp = await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/vision_bundle.mjs`);
+    const files = await mp.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/wasm`);
+    const make = () => mp.FaceLandmarker.createFromOptions(files, {
+      baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', delegate: 'GPU' },
+      runningMode: 'VIDEO', numFaces: 1 });
+    await make().then(lm => { mpFiles = make; landmarkers.set(vctx, lm); });
+    lmState = 'ready';
+  } catch(e){ console.warn(e); lmState = 'error'; }
+  teethStatus();
+}
+function findMouth(v, ctx){
+  if (lmState !== 'ready' || !(v.videoWidth || v.width) || (v.readyState !== undefined && v.readyState < 2)) return null;
+  let lm = landmarkers.get(ctx);
+  if (lm === undefined){ landmarkers.set(ctx, null); mpFiles().then(x => landmarkers.set(ctx, x)).catch(() => {}); return null; }
+  if (!lm) return null;
+  lmTs = Math.max(lmTs + 1, Math.floor(performance.now()));
+  const res = lm.detectForVideo(v, lmTs);
+  const f = res && res.faceLandmarks && res.faceLandmarks[0]; if (!f) return null;
+  const out = new Float32Array(40);
+  INNER_LIPS.forEach((idx, i) => { out[i*2] = f[idx].x; out[i*2+1] = f[idx].y; });
+  return out;
+}
+function teethStatus(){
+  const el = $('#teethInfo'); if (!el) return;
+  el.textContent = lmState === 'loading' ? 'กำลังโหลดตัวจับใบหน้า (ครั้งแรกใช้เวลาสักครู่)…'
+    : lmState === 'ready' ? 'พร้อมใช้ — เปิดคลิปที่เห็นฟันแล้วกด ▶ เพื่อดูผล'
+    : lmState === 'error' ? 'โหลดตัวจับใบหน้าไม่ได้ — ต้องเปิดโปรแกรมผ่าน “เปิดสตูดิโอ.bat” และต่ออินเทอร์เน็ต' : '';
+}
+const beautyProcs = new WeakMap();
+function beautify(v, ctx){
+  let p = beautyProcs.get(ctx);
+  if (p === undefined){ try { p = makeBeauty(); } catch(e){ p = null; console.warn(e); } beautyProcs.set(ctx, p); }
+  if (!p){ if (!beautyWarned){ beautyWarned = true; msg('เครื่องนี้ใช้โหมดบิวตี้และปรับแสงไม่ได้ (ไม่รองรับ WebGL) — ส่งออกแบบไม่แต่งแทน', 'err'); } return v; }
+  try { return p.run(v, ctx === vctx ? 1280 : 1920, frame.teethOn ? findMouth(v, ctx) : null); } catch(e){ return v; }
+}
+function hexA(hex, a){ const n = parseInt(hex.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; }
+function drawBox(ctx, w, h, text, st){
+  if (!st.on) return null;
+  const L = layout(ctx, w, h, text, st); if (!L) return null;
+  if (st.bg){
+    ctx.fillStyle = hexA(st.bgColor, st.bgOp/100);
+    ctx.beginPath(); ctx.roundRect(L.x, L.y, L.w, L.h, Math.min(st.radius/100*L.px*3, L.h/2)); ctx.fill();
+  }
+  ctx.textBaseline = 'middle'; ctx.textAlign = st.align;
+  const padX = L.sx;
+  const tx = st.align==='left' ? L.x+padX : st.align==='right' ? L.x+L.w-padX : L.x+L.w/2;
+  L.lines.forEach((ln,i) => {
+    const ty = L.y + L.sy + L.lh*i + L.lh/2;
+    if (st.stroke){ ctx.lineJoin='round'; ctx.lineWidth = Math.max(2, L.px*0.14); ctx.strokeStyle = st.strokeColor; ctx.strokeText(ln, tx, ty); }
+    ctx.fillStyle = st.color; ctx.fillText(ln, tx, ty);
+  });
+  return L;
+}
+const drawAll = (ctx, w, h, texts) => boxes.map((b,i) => drawBox(ctx, w, h, texts[i], b));
+function demoBg(ctx, w, h, t){
+  const g = ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'#1f3b4d'); g.addColorStop(1,'#3d2a4f'); ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='rgba(255,255,255,.06)';
+  for (let i=0;i<6;i++){ ctx.beginPath(); ctx.arc((w*(i/5)+t*40)%(w+200)-100, h*0.55+Math.sin(t+i)*60, 120+i*20, 0, 7); ctx.fill(); }
+  ctx.fillStyle='rgba(255,255,255,.35)'; ctx.font=`500 ${h*0.035}px "IBM Plex Sans Thai",sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('ตัวอย่างจำลอง — เพิ่มวิดีโอของคุณ', w/2, h*0.5);
+}
+let rects = [];
+const pvCache = document.createElement('canvas'), pvCacheCtx = pvCache.getContext('2d');
+let pvCacheOk = false, pvCacheT = -1, seekTarget = null, scrubT = null;
+function seekPreview(t){
+  scrubT = t;
+  if (pv.seeking){ seekTarget = t; return; }
+  seekTarget = null; pv.currentTime = t;
+}
+const HAS_RVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+function grabFrame(){
+  // copy the frame that is really on screen (downscaled) so the preview never shows a half-ready black frame
+  const vw = pv.videoWidth, vh = pv.videoHeight; if (!vw) return;
+  const sc = Math.min(1, 1280 / Math.max(vw, vh)), cw = Math.round(vw*sc), ch = Math.round(vh*sc);
+  if (pvCache.width !== cw || pvCache.height !== ch){ pvCache.width = cw; pvCache.height = ch; }
+  pvCacheCtx.drawImage(pv, 0, 0, cw, ch); pvCacheT = pv.currentTime; pvCacheOk = true;
+}
+function onPvFrame(){
+  grabFrame();
+  if (!pv.seeking && seekTarget == null && (!tlDrag || Math.abs(pv.currentTime - (scrubT ?? pv.currentTime)) < 0.08)) scrubT = null;
+  pv.requestVideoFrameCallback(onPvFrame);
+}
+if (HAS_RVFC) pv.requestVideoFrameCallback(onPvFrame);
+pv.addEventListener('seeked', () => { if (seekTarget != null){ const t = seekTarget; seekTarget = null; pv.currentTime = t; } else if (!HAS_RVFC) scrubT = null; });
+/* thumbnails for instant scrubbing: decode the whole clip once on the GPU, keep a small frame every 0.2 s */
+function nearestThumb(th, t){
+  // closest prepared preview frame; only used if it is really near the target time
+  let lo = 0, hi = th.length - 1;
+  if (hi < 0) return null;
+  while (lo < hi){ const m = (lo + hi) >> 1; if (th[m].t < t) lo = m + 1; else hi = m; }
+  let best = th[lo]; if (lo > 0 && Math.abs(th[lo-1].t - t) < Math.abs(best.t - t)) best = th[lo-1];
+  return Math.abs(best.t - t) <= (th.step || 0.3) * 1.5 ? best.bmp : null;
+}
+const hiddenVideo = url => { const v = document.createElement('video'); v.muted = true; v.preload = 'auto'; v.playsInline = true; v.src = url;
+  Object.assign(v.style, { position: 'fixed', left: '0', top: '0', width: '2px', height: '2px', opacity: '0.01', pointerEvents: 'none' }); document.body.appendChild(v); return v; };
+const frameReady = v => new Promise(res => { let done = false; const fin = () => { if (!done){ done = true; res(); } };
+  if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(fin); setTimeout(fin, 400); });
+async function buildThumbs(it){
+  // preview frames come from the browser's own video player, so they always have the same orientation as the preview
+  if (!it || it.thumbs || it.thumbing) return;
+  it.thumbing = true;
+  const v = hiddenVideo(it.url);
+  try {
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error('thumb video')); });
+    const d = isFinite(v.duration) ? v.duration : 0; if (!d) return;
+    const step = Math.max(0.25, d / 400);
+    const sc = Math.min(1, 480 / Math.max(v.videoWidth, v.videoHeight)), tw = Math.round(v.videoWidth*sc), th = Math.round(v.videoHeight*sc);
+    const cv = document.createElement('canvas'); cv.width = tw; cv.height = th; const cx = cv.getContext('2d');
+    const list = []; list.step = step; it.thumbs = list;
+    for (let t = 0; t < d; t += step){
+      if (!items.includes(it)) break;
+      await new Promise(res => { v.onseeked = res; v.currentTime = t; });
+      await frameReady(v);
+      cx.drawImage(v, 0, 0, tw, th);
+      list.push({ t: v.currentTime, bmp: await createImageBitmap(cv) });
+    }
+  } catch(e){ console.warn('thumbs', e); }
+  finally { v.removeAttribute('src'); v.load(); v.remove(); it.thumbing = false; }
+}
+function render(){
+  const w = view.width, h = view.height;
+  if (cur < 0) demoBg(vctx, w, h, performance.now()/1000);
+  else {
+    if (!HAS_RVFC && pv.readyState >= 2 && !pv.seeking && pv.videoWidth && pvCacheT !== pv.currentTime) grabFrame();
+    const it = items[cur];
+    const thumb = (scrubT != null && it.thumbs) ? nearestThumb(it.thumbs, scrubT) : null;
+    vctx.fillStyle='#000'; vctx.fillRect(0,0,w,h);
+    if (thumb) drawVideo(vctx, thumb, w, h, it.mirror);
+    else if (pvCacheOk) drawVideo(vctx, pvCache, w, h, it.mirror);
+  }
+  if (frame.safe && w < h){
+    vctx.save(); vctx.fillStyle='rgba(255,60,90,.16)'; vctx.strokeStyle='rgba(255,90,110,.6)'; vctx.setLineDash([8,8]); vctx.lineWidth=2;
+    [[0,0,w,h*0.09],[w*0.84,h*0.38,w*0.16,h*0.42],[0,h*0.8,w,h*0.2]].forEach(r => { vctx.fillRect(...r); vctx.strokeRect(...r); });
+    vctx.restore();
+  }
+  cutSkip();
+  rects = drawAll(vctx, w, h, textsOf());
+  rects.forEach((r,i) => { if (!r || (i!==sel && i!==hoverIdx)) return;
+    vctx.save(); vctx.setLineDash(i===sel?[10,8]:[4,6]); vctx.lineWidth = Math.max(2,h/360); vctx.strokeStyle = i===sel ? '#f2b51c' : 'rgba(255,255,255,.7)';
+    vctx.strokeRect(r.x-4,r.y-4,r.w+8,r.h+8);
+    if (i===sel){ const hs = handleSize(); vctx.setLineDash([]); vctx.fillStyle='#f2b51c'; vctx.strokeStyle='#111'; vctx.lineWidth=2;
+      corners(r).forEach(([cx,cy]) => { vctx.fillRect(cx-hs/2,cy-hs/2,hs,hs); vctx.strokeRect(cx-hs/2,cy-hs/2,hs,hs); }); }
+    vctx.fillStyle='#f2b51c'; vctx.font=`600 ${Math.max(14,h*0.025)}px "Kanit",sans-serif`; vctx.textAlign='left'; vctx.textBaseline='bottom';
+    if (i===sel) vctx.fillText(String(i+1), r.x-2, r.y-8 < 16 ? r.y+r.h+28 : r.y-8);
+    vctx.restore(); });
+  if (cur >= 0 && pv.duration){ trimGuard(); paintTimeline(); }
+  requestAnimationFrame(render);
+}
+const fmt = s => { s = Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
+
+/* ---------- dragging ---------- */
+const toCanvas = e => { const r = view.getBoundingClientRect(); return {x:(e.clientX-r.left)*view.width/r.width, y:(e.clientY-r.top)*view.height/r.height}; };
+const hit = p => { const order = [sel, ...[3,2,1,0].filter(i=>i!==sel)];
+  return order.find(i => { const r = rects[i]; return r && p.x>=r.x-10 && p.x<=r.x+r.w+10 && p.y>=r.y-10 && p.y<=r.y+r.h+10; }) ?? -1; };
+const handleSize = () => { const rw = view.getBoundingClientRect().width || view.width; const css = matchMedia('(pointer:coarse)').matches ? 26 : 12; return Math.max(22, Math.min(view.width, view.height)*0.035, css * view.width / rw); };
+const corners = r => [[r.x-4,r.y-4],[r.x+r.w+4,r.y-4],[r.x-4,r.y+r.h+4],[r.x+r.w+4,r.y+r.h+4]];
+const onCorner = p => { const r = rects[sel]; if (!r) return -1; const t = handleSize()*0.9;
+  return corners(r).findIndex(([cx,cy]) => Math.abs(p.x-cx) <= t && Math.abs(p.y-cy) <= t); };
+/* one finger / mouse: drag or resize a box · two fingers: pinch a box to resize it, or pinch the video to zoom the preview */
+const ptrs = new Map(); let pinch = null, boxBefore = null, lastTap = 0;
+const zoom = { z: 1, x: 0, y: 0 };
+function applyZoom(){
+  const r = view.parentElement.getBoundingClientRect(), w = view.offsetWidth, h = view.offsetHeight;
+  const mx = Math.max(0, (w * zoom.z - r.width) / 2), my = Math.max(0, (h * zoom.z - r.height) / 2);
+  zoom.x = Math.max(-mx, Math.min(mx, zoom.x)); zoom.y = Math.max(-my, Math.min(my, zoom.y));
+  view.style.transform = zoom.z > 1.01 ? `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.z})` : '';
+  $('#zoomReset').hidden = zoom.z <= 1.01; $('#zoomReset').textContent = '⤢ ' + zoom.z.toFixed(1) + 'x · แตะเพื่อกลับ';
+}
+function resetZoom(){ zoom.z = 1; zoom.x = 0; zoom.y = 0; applyZoom(); }
+const two = () => { const [a, b] = [...ptrs.values()]; return { d: Math.max(10, Math.hypot(a.x - b.x, a.y - b.y)), mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 }; };
+view.addEventListener('pointerdown', e => {
+  e.preventDefault(); view.setPointerCapture(e.pointerId);
+  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (ptrs.size === 2){
+    // second finger: undo whatever the first finger started, then pinch
+    if (boxBefore){ Object.assign(B(), boxBefore); }
+    dragging = null; view.classList.remove('drag');
+    const t = two(), mid = toCanvas({ clientX: t.mx, clientY: t.my });
+    const pts = [...ptrs.values()].map(q => toCanvas({ clientX: q.x, clientY: q.y }));
+    let i = hit(mid); if (i < 0) i = hit(pts[0]); if (i < 0) i = hit(pts[1]);
+    if (i >= 0){ if (i !== sel) selectBox(i); pinch = { mode: 'box', d0: t.d, s0: B().size }; }
+    else pinch = { mode: 'view', d0: t.d, z0: zoom.z, mx0: t.mx, my0: t.my, x0: zoom.x, y0: zoom.y };
+    return;
+  }
+  if (ptrs.size > 2) return;
+  const p = toCanvas(e);
+  boxBefore = rects[sel] ? { x: B().x, y: B().y, size: B().size } : null;
+  const k = onCorner(p);
+  if (k >= 0){ const r = rects[sel]; const cx = r.x+r.w/2, cy = r.y+r.h/2;
+    dragging = {resize:true, cx, cy, d0: Math.max(10, Math.hypot(p.x-cx, p.y-cy)), s0: B().size};
+  } else {
+    let i = hit(p);
+    if (i < 0){
+      if (e.pointerType === 'touch'){ dragging = null; return; }   // on a phone, touching empty video does not move a box
+      if (!rects[sel]) return; i = sel;
+    }
+    if (i !== sel){ selectBox(i); boxBefore = { x: B().x, y: B().y, size: B().size }; }
+    const r = rects[i]; dragging = hit(p) < 0 ? {dx:0, dy:0} : {dx: p.x-(r.x+r.w/2), dy: p.y-(r.y+r.h/2)};
+  }
+  view.classList.add('drag'); move(p);
+});
+view.addEventListener('pointermove', e => {
+  if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && ptrs.size >= 2){
+    const t = two(), k = t.d / pinch.d0;
+    if (pinch.mode === 'box'){ B().size = Math.round(Math.max(2, Math.min(25, pinch.s0 * k)) * 10) / 10; $('#size').value = B().size; }
+    else { zoom.z = Math.max(1, Math.min(5, pinch.z0 * k)); zoom.x = pinch.x0 + (t.mx - pinch.mx0); zoom.y = pinch.y0 + (t.my - pinch.my0); applyZoom(); }
+    return;
+  }
+  const p = toCanvas(e); hoverIdx = hit(p);
+  if (dragging) move(p);
+  else if (e.pointerType === 'touch' && ptrs.size === 1 && zoom.z > 1.01){
+    // one finger on empty video while zoomed: pan around
+    const q = ptrs.get(e.pointerId); if (q.px != null){ zoom.x += e.clientX - q.px; zoom.y += e.clientY - q.py; applyZoom(); }
+    q.px = e.clientX; q.py = e.clientY;
+  }
+  else { const k = onCorner(p); view.style.cursor = k===0||k===3 ? 'nwse-resize' : k===1||k===2 ? 'nesw-resize' : hoverIdx>=0 ? 'move' : ''; } });
+view.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') hoverIdx = -1; });
+const endDrag = e => {
+  const wasPinch = !!pinch;
+  if (e && ptrs.has(e.pointerId)) ptrs.delete(e.pointerId);
+  if (pinch && ptrs.size < 2){ pinch = null; save(); }
+  if (dragging){ dragging = null; view.classList.remove('drag'); save(); }
+  if (e && e.pointerType === 'touch' && !wasPinch && ptrs.size === 0){
+    const now = Date.now(); if (now - lastTap < 320 && zoom.z > 1.01) resetZoom(); lastTap = now;
+  }
+};
+view.addEventListener('pointerup', endDrag); view.addEventListener('pointercancel', endDrag);
+function move(p){
+  if (dragging.resize){ const d = Math.hypot(p.x-dragging.cx, p.y-dragging.cy);
+    B().size = Math.round(Math.max(2, Math.min(25, dragging.s0*d/dragging.d0))*10)/10; $('#size').value = B().size; return; }
+  B().x = Math.max(0, Math.min(1, (p.x-dragging.dx)/view.width)); B().y = Math.max(0, Math.min(1, (p.y-dragging.dy)/view.height)); }
+
+/* ---------- controls (bound to the selected box) ---------- */
+const vals = ['font','size','color','strokeColor','bgColor','bgOp','radius','padX','padY'], nums = {size:1,bgOp:1,radius:1,padX:1,padY:1};
+vals.forEach(k => $('#'+k).addEventListener('input', e => { B()[k] = nums[k] ? +e.target.value : e.target.value; save(); paintTabs(); }));
+const checks = {on:'on', bold:'bold', stroke:'stroke', bg:'bg'};
+Object.keys(checks).forEach(id => $('#'+id).addEventListener('change', e => { B()[checks[id]] = e.target.checked; syncControls(); save(); }));
+document.querySelectorAll('#align button').forEach(b => b.onclick = () => { B().align = b.dataset.al; syncControls(); save(); });
+document.querySelectorAll('#pos button').forEach(b => b.onclick = () => { const [x,y] = b.dataset.p.split(',').map(Number); B().x=x; B().y=y; save(); });
+const swatches = {color:['#ffffff','#111111','#ffd400','#ff3b30','#00c2ff','#2ecc71'],
+  strokeColor:['#111111','#ffffff','#ffd400','#ff3b30','#00c2ff','#e0245e'],
+  bgColor:['#ffd400','#111111','#ffffff','#e0245e','#1565c0','#1b8a4b']};
+let used = {};
+try { used = JSON.parse(localStorage.getItem('vts-colors')||'{}') || {}; } catch(e){}
+function bump(c){ c = c.toLowerCase(); used[c] = (used[c]||0) + 1; try { localStorage.setItem('vts-colors', JSON.stringify(used)); } catch(e){} renderSwatches(); }
+function renderSwatches(){
+  const fav = Object.entries(used).sort((a,b) => b[1]-a[1]).map(x => x[0]);
+  document.querySelectorAll('.sw').forEach(box => { const key = box.dataset.for; box.innerHTML = '';
+    const add = c => { const b = document.createElement('button'); b.style.background = c; b.title = c; b.setAttribute('aria-label', c);
+      b.onclick = () => { B()[key] = c; $('#'+key).value = c; save(); paintTabs(); bump(c); }; box.appendChild(b); };
+    swatches[key].forEach(add);
+    const mine = fav.filter(c => !swatches[key].includes(c)).slice(0, 6);
+    if (mine.length){ const l = document.createElement('span'); l.className='rlab'; l.textContent='สีที่ใช้บ่อย'; box.appendChild(l); mine.forEach(add); }
+  });
+}
+['color','strokeColor','bgColor'].forEach(k => $('#'+k).addEventListener('change', e => bump(e.target.value)));
+renderSwatches();
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => selectBox(+b.dataset.b));
+
+function paintTabs(){
+  document.querySelectorAll('#tabs button').forEach((b,i) => { b.classList.toggle('on', i===sel); b.classList.toggle('off', !boxes[i].on);
+    b.setAttribute('aria-selected', i===sel); b.firstChild.style.background = boxes[i].bg ? boxes[i].bgColor : boxes[i].color; });
+}
+function syncControls(){
+  const b = B(); vals.forEach(k => $('#'+k).value = b[k]);
+  Object.keys(checks).forEach(id => $('#'+id).checked = b[checks[id]]);
+  document.querySelectorAll('#align button').forEach(x => x.classList.toggle('on', x.dataset.al === b.align));
+  $('#strokeRow').hidden = !b.stroke; $('#bgBox').hidden = !b.bg;
+  $('#txt').value = textsOf()[sel]; $('#txt').disabled = !b.on;
+  paintTabs();
+}
+function selectBox(i){ sel = i; syncControls(); }
+
+const txt = $('#txt');
+txt.addEventListener('input', () => {
+  let v = txt.value.split('\n'); if (v.length > 3){ v = v.slice(0,3); txt.value = v.join('\n'); }
+  if ($('#same').checked || cur < 0){ shared[sel] = txt.value; items.forEach(it => it.texts[sel] = txt.value); }
+  else items[cur].texts[sel] = txt.value;
+  if (cur < 0 || $('#same').checked) save();
+});
+$('#same').addEventListener('change', e => { if (e.target.checked){ const src = textsOf().slice(); shared = src; items.forEach(it => it.texts = src.slice()); save(); } });
+
+/* ---------- files ---------- */
+$('#pick').addEventListener('change', e => { addFiles(e.target.files); e.target.value=''; });
+const drop = $('#drop');
+['dragenter','dragover'].forEach(t => document.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(t => document.addEventListener(t, e => { e.preventDefault(); if (t==='drop' || e.target===drop) drop.classList.remove('over'); }));
+document.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+function addFiles(list){
+  const vids = [...list].filter(f => f.type.startsWith('video/') || /\.(mp4|mov|webm|mkv|m4v)$/i.test(f.name));
+  vids.forEach(f => { const it = {file:f, url:URL.createObjectURL(f), name:f.name, texts: shared.slice(), mirror: $('#mirrorAll').checked && $('#mirror').checked, status:'พร้อม', prog:0, blob:null, ext:''};
+    items.push(it); thumb(it); });
+  if (vids.length && cur < 0) select(0); else drawList();
+  if (window.__refreshMobileBin) window.__refreshMobileBin();
+  $('#expAll').disabled = !items.length || busy;
+}
+// list thumbnails are made one clip at a time (opening many videos at once is very slow on iPhone)
+const thumbQ = []; let thumbBusy = false;
+function thumb(it){ thumbQ.push(it); pumpThumbs(); }
+function pumpThumbs(){
+  if (thumbBusy) return; const it = thumbQ.shift(); if (!it) return;
+  if (!items.includes(it)){ pumpThumbs(); return; }
+  thumbBusy = true;
+  const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'metadata'; v.src = it.url;
+  const done = () => { clearTimeout(to); v.removeAttribute('src'); v.load(); thumbBusy = false; setTimeout(pumpThumbs, 0); };
+  const to = setTimeout(done, 6000);
+  v.addEventListener('loadeddata', () => { v.currentTime = Math.min(0.5, (v.duration||2)/3); }, {once:true});
+  v.addEventListener('seeked', () => { try { const c = document.createElement('canvas'); c.width=112; c.height=72;
+    c.getContext('2d').drawImage(v,0,0,112,72); it.thumb = c.toDataURL('image/jpeg',.7); drawList(); } catch(e){} done(); }, {once:true});
+  v.addEventListener('error', done, {once:true});
+}
+function select(i){
+  cur = i; const it = items[i]; pv.pause(); $('#play').textContent='▶';
+  pvCacheOk = false; pvCacheT = -1; seekTarget = null; scrubT = null;
+  setTimeout(() => { if (items[cur] === it) buildThumbs(it); }, matchMedia('(pointer:coarse)').matches ? 2500 : 300);
+  pv.src = it.url; $('#mirror').checked = !!it.mirror;
+  pv.onloadedmetadata = () => { sizeView(); pv.currentTime = 0.1; };
+  $('#mhint').textContent = 'คลิกกล่องเพื่อเลือก แล้วลากเพื่อย้าย · ' + it.name;
+  $('#expOne').disabled = busy; syncControls(); drawList(); showCutInfo(); analyzeCut(it);
+}
+function drawList(){
+  updSaveAll();
+  const ul = $('#clips'); ul.innerHTML=''; $('#clearClips').hidden = !items.length;
+  if (window.__refreshMobileBin) setTimeout(window.__refreshMobileBin, 0);
+  items.forEach((it,i) => {
+    const li = document.createElement('li'); li.className = i===cur?'on':''; li.tabIndex = 0;
+    const im = it.thumb ? Object.assign(document.createElement('img'),{src:it.thumb, alt:''}) : Object.assign(document.createElement('div'),{className:'ph'});
+    const d = document.createElement('div'); d.style.minWidth='0';
+    const nm = document.createElement('div'); nm.className='nm'; nm.textContent = it.name;
+    const st = document.createElement('div'); st.className='st';
+    const pill = document.createElement('span'); pill.className = 'pill' + (it.blob?' ok': it.status==='กำลังทำ'?' run':''); pill.textContent = it.saved ? 'บันทึกแล้ว' : it.blob ? 'เสร็จแล้ว' : it.status;
+    if ((it.trimIn || 0) > 0.05 || it.trimOut != null){ const m = document.createElement('span'); m.className='pill'; m.textContent='✂ ตัดหัวท้าย'; st.appendChild(m); }
+    if (it.mirror){ const m = document.createElement('span'); m.className='pill'; m.textContent='⇋ กลับด้าน'; st.appendChild(m); }
+    st.appendChild(pill);
+    if (it.blob){ const sb = document.createElement('button'); sb.textContent='บันทึก'; sb.style.padding='1px 8px'; sb.style.fontSize='.72rem';
+      sb.onclick = ev => { ev.stopPropagation(); saveItem(it); }; st.appendChild(sb); }
+    d.append(nm, st);
+    if (it.status==='กำลังทำ'){ const bar = document.createElement('div'); bar.className='bar'; bar.innerHTML = `<i style="width:${it.prog*100}%"></i>`; d.appendChild(bar); it.barEl = bar.firstChild; }
+    li.append(im, d); li.onclick = () => select(i); li.onkeydown = e => { if (e.key==='Enter') select(i); };
+    ul.appendChild(li);
+  });
+}
+
+/* ---------- transport ---------- */
+function audioChain(node, out, gain){
+  if (gain <= 1){ node.connect(out); return null; }
+  const g = actx.createGain(); g.gain.value = gain;
+  const lim = actx.createDynamicsCompressor();
+  lim.threshold.value = -2; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.003; lim.release.value = 0.2;
+  node.connect(g); g.connect(lim); lim.connect(out); return g;
+}
+let pvGain = null;
+function previewAudio(){
+  try {
+    actx = actx || new AudioContext(); actx.resume();
+    if (!pvGain){
+      const s = actx.createMediaElementSource(pv);
+      pvGain = actx.createGain();
+      const lim = actx.createDynamicsCompressor();
+      lim.threshold.value = -2; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.003; lim.release.value = 0.2;
+      s.connect(pvGain); pvGain.connect(lim); lim.connect(actx.destination);
+    }
+    pvGain.gain.value = frame.boostOn ? frame.boost/100 : 1;
+  } catch(e){}
+}
+function paintFx(){
+  $('#boostOn').checked = frame.boostOn; $('#boostBox').hidden = !frame.boostOn;
+  $('#boost').value = frame.boost; $('#boostVal').textContent = frame.boost + '%';
+  $('#beautyOn').checked = frame.beautyOn; $('#beautyBox').hidden = !frame.beautyOn;
+  $('#smooth').value = frame.smooth; $('#smoothVal').textContent = frame.smooth;
+  $('#bright').value = frame.bright; $('#brightVal').textContent = frame.bright;
+  if (pvGain) pvGain.gain.value = frame.boostOn ? frame.boost/100 : 1;
+}
+const fxChanged = () => { items.forEach(it => { if (it.blob){ it.blob = null; it.saved = false; it.status = 'พร้อม'; } }); drawList(); paintFx(); save(); };
+$('#boostOn').addEventListener('change', e => { frame.boostOn = e.target.checked; fxChanged(); });
+$('#boost').addEventListener('input', e => { frame.boost = +e.target.value; paintFx(); save(); });
+$('#boost').addEventListener('change', fxChanged);
+$('#beautyOn').addEventListener('change', e => { frame.beautyOn = e.target.checked; fxChanged(); });
+['smooth','bright'].forEach(k => { $('#'+k).addEventListener('input', e => { frame[k] = +e.target.value; paintFx(); save(); }); $('#'+k).addEventListener('change', fxChanged); });
+document.querySelectorAll('.cmpBtn').forEach(cmp => {
+  cmp.addEventListener('pointerdown', e => { e.preventDefault(); comparing = true; cmp.textContent = 'กำลังแสดงภาพก่อนแต่ง'; });
+  ['pointerup','pointerleave','pointercancel'].forEach(t => cmp.addEventListener(t, () => { comparing = false; cmp.textContent = 'กดค้างเพื่อดูภาพก่อนแต่ง'; }));
+});
+const ADJ = ['exposure','brightness','contrast','sharpness'];
+function paintAdj(){
+  $('#adjOn').checked = frame.adjOn; $('#adjBox').hidden = !frame.adjOn;
+  ADJ.forEach(k => { $('#'+k).value = frame[k]; const v = frame[k]; $('#'+k+'Val').textContent = (k === 'exposure' ? (v > 0 ? '+' : '') + v.toFixed(1) + ' EV' : (v > 0 && k !== 'sharpness' ? '+' : '') + v); });
+}
+$('#adjOn').addEventListener('change', e => { frame.adjOn = e.target.checked; paintAdj(); fxChanged(); });
+ADJ.forEach(k => { $('#'+k).addEventListener('input', e => { frame[k] = +e.target.value; paintAdj(); save(); }); $('#'+k).addEventListener('change', fxChanged); });
+$('#adjReset').onclick = () => { ADJ.forEach(k => frame[k] = 0); paintAdj(); fxChanged(); };
+paintAdj();
+function paintTeeth(){ $('#teethOn').checked = frame.teethOn; $('#teethBox').hidden = !frame.teethOn; $('#teeth').value = frame.teeth; $('#teethVal').textContent = frame.teeth; teethStatus(); }
+$('#teethOn').addEventListener('change', e => { frame.teethOn = e.target.checked; paintTeeth(); fxChanged(); if (frame.teethOn) loadFaceModel(); });
+$('#teeth').addEventListener('input', e => { frame.teeth = +e.target.value; paintTeeth(); save(); });
+$('#teeth').addEventListener('change', fxChanged);
+paintTeeth(); if (frame.teethOn) loadFaceModel();
+const sv = $('#skinView');
+sv.addEventListener('pointerdown', e => { e.preventDefault(); showSkin = true; });
+['pointerup','pointerleave','pointercancel'].forEach(t => sv.addEventListener(t, () => { showSkin = false; }));
+paintFx();
+$('#play').onclick = () => { if (cur<0) return; previewAudio(); if (pv.paused){ const [a,b] = trimOf(items[cur]); if (pv.currentTime < a || pv.currentTime >= b - 0.05) pv.currentTime = a; pv.play(); $('#play').textContent='❚❚'; } else { pv.pause(); $('#play').textContent='▶'; } };
+pv.onended = () => $('#play').textContent='▶';
+/* ---------- trim start / end ---------- */
+const tl = $('#tl');
+const clipDur = () => (pv.duration && isFinite(pv.duration)) ? pv.duration : 0;
+const trimOf = it => { const d = (it && it.dur) || clipDur(); return [Math.max(0, it && it.trimIn || 0), Math.min(d, it && it.trimOut != null ? it.trimOut : d)]; };
+function paintTimeline(){
+  const it = items[cur], d = clipDur();
+  if (!it || !d){ $('#tlKeep').style.left = '0%'; $('#tlKeep').style.width = '100%'; $('#tlPlay').style.width = '0%'; $('#tlHead').style.left = '0%'; $('#hIn').style.left = '0%'; $('#hOut').style.left = '100%'; $('#time').textContent = '0:00 / 0:00'; return; }
+  const [a, b] = trimOf(it), pc = t => (t / d * 100) + '%';
+  $('#tlKeep').style.left = pc(a); $('#tlKeep').style.width = ((b - a) / d * 100) + '%';
+  const ph = scrubT != null ? scrubT : pv.currentTime;
+  $('#tlPlay').style.width = pc(ph); $('#tlHead').style.left = pc(ph);
+  $('#hIn').style.left = pc(a); $('#hOut').style.left = pc(b);
+  $('#time').textContent = fmt(ph) + ' / ' + fmt(d);
+  const cut = (a > 0.05 || b < d - 0.05);
+  $('#trimInfo').textContent = cut ? `ใช้ช่วง ${fmtx(a)} – ${fmtx(b)} · ยาว ${fmtx(b - a)} (ตัดหัว ${fmtx(a)} ตัดท้าย ${fmtx(d - b)})` : 'ลากที่จับสีเหลืองบนแถบเวลา เพื่อตัดหัว-ท้าย';
+}
+const fmtx = t => { t = Math.max(0, t); const m = Math.floor(t / 60), sec = t - m * 60; return m + ':' + sec.toFixed(1).padStart(4, '0'); };
+function trimGuard(){
+  const it = items[cur]; if (!it || pv.paused || tlDrag) return;
+  const [a, b] = trimOf(it);
+  if (pv.currentTime >= b - 0.02){ pv.pause(); pv.currentTime = b; $('#play').textContent = '▶'; }
+  else if (pv.currentTime < a - 0.05) pv.currentTime = a;
+}
+function setTrim(which, t){
+  const it = items[cur]; if (!it) return; const d = clipDur(); it.dur = d;
+  let [a, b] = trimOf(it);
+  if (which === 'in') a = Math.max(0, Math.min(t, b - 0.3)); else b = Math.min(d, Math.max(t, a + 0.3));
+  const was = (it.trimIn || 0) > 0.05 || it.trimOut != null;
+  it.trimIn = a; it.trimOut = b >= d - 0.01 ? null : b;
+  const now = (it.trimIn || 0) > 0.05 || it.trimOut != null;
+  if (it.blob){ it.blob = null; it.saved = false; it.status = 'พร้อม'; drawList(); } else if (was !== now) drawList();
+  paintTimeline();
+}
+let tlDrag = null;
+const tlTime = e => { const r = tl.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * clipDur(); };
+tl.addEventListener('pointerdown', e => {
+  if (cur < 0 || !clipDur()) return; e.preventDefault();
+  const h = e.target.closest('.tl-h');
+  tlDrag = h ? (h.id === 'hIn' ? 'in' : 'out') : 'seek';
+  if (h) h.classList.add('drag');
+  tl.setPointerCapture(e.pointerId); tlMove(e);
+});
+tl.addEventListener('pointermove', e => { if (tlDrag) tlMove(e); });
+function tlMove(e){
+  const t = tlTime(e);
+  if (tlDrag === 'seek') seekPreview(t);
+  else { setTrim(tlDrag, t); seekPreview(tlDrag === 'in' ? trimOf(items[cur])[0] : trimOf(items[cur])[1]); }
+  paintTimeline();
+}
+const tlEnd = () => { if (!tlDrag) return; document.querySelectorAll('.tl-h').forEach(h => h.classList.remove('drag')); tlDrag = null; };
+tl.addEventListener('pointerup', tlEnd); tl.addEventListener('pointercancel', tlEnd);
+$('#setIn').onclick = () => { if (cur >= 0) setTrim('in', pv.currentTime); };
+$('#setOut').onclick = () => { if (cur >= 0) setTrim('out', pv.currentTime); };
+$('#trimReset').onclick = () => { const it = items[cur]; if (!it) return; it.trimIn = 0; it.trimOut = null; if (it.blob){ it.blob = null; it.saved = false; it.status = 'พร้อม'; } drawList(); paintTimeline(); };
+pv.addEventListener('loadedmetadata', () => { if (items[cur]) items[cur].dur = clipDur(); paintTimeline(); });
+
+/* ---------- export ---------- */
+const msg = (t, k) => { const m = $('#msg'); m.hidden = !t; m.textContent = t||''; m.dataset.k = k||''; };
+function pickMime(){
+  const c = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  for (const m of c) if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m;
+  return null;
+}
+const embedded = (() => { try { return window.self !== window.top; } catch(e){ return true; } })();
+const jobs = new Set(); let runCancelled = false; let dir = null, useDownloads = false, server = null, pickerOk = ('showDirectoryPicker' in window) && !embedded;
+const inClaude = () => !!dl;
+function cancelErr(){ const e = new Error('ยกเลิกแล้ว'); e.cancelled = true; return e; }
+/* ---------- fast export: WebCodecs (GPU decode/encode, faster than real time) ---------- */
+const LIB_MP4BOX = 'https://cdn.jsdelivr.net/npm/mp4box@0.5.2/dist/mp4box.all.min.js';
+const LIB_MUXER = 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.js';
+const loadScript = src => new Promise((res, rej) => { if (document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement('script'); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => { sc.remove(); rej(new Error('load ' + src)); }; document.head.appendChild(sc); });
+let fastLibs = null;
+const loadFastLibs = () => fastLibs || (fastLibs = Promise.all([loadScript(LIB_MP4BOX), loadScript(LIB_MUXER)]).catch(e => { fastLibs = null; throw e; }));
+let lastExportMode = '', rtLock = Promise.resolve();
+async function exportItem(it){
+  if (window.VideoEncoder && window.VideoDecoder && frame.fastExport !== false){
+    try { await exportFast(it); lastExportMode = 'fast'; return; }
+    catch(e){ if (e.cancelled) throw e; console.warn('fast export failed, using real-time', e); }
+  }
+  lastExportMode = 'realtime';
+  const prev = rtLock; let release; rtLock = new Promise(r => release = r);
+  try { await prev; if (runCancelled) throw cancelErr(); await exportRealtime(it); } finally { release(); }
+}
+function demux(buf){
+  return new Promise((resolve, reject) => {
+    const f = MP4Box.createFile(); const out = { samples: [], audio: false };
+    f.onError = e => reject(new Error('demux: ' + e));
+    f.onReady = info => {
+      const vt = info.videoTracks[0]; if (!vt) return reject(new Error('no video track'));
+      const trak = f.getTrackById(vt.id); let desc = null;
+      for (const en of trak.mdia.minf.stbl.stsd.entries){ const b = en.avcC || en.hvcC || en.vpcC || en.av1C; if (b){ const ds = new DataStream(undefined, 0, DataStream.BIG_ENDIAN); b.write(ds); desc = new Uint8Array(ds.buffer, 8); break; } }
+      const m = vt.matrix || [65536,0,0,0,65536,0,0,0,1073741824];
+      out.rot = Math.round(Math.atan2(m[1], m[0]) * 180 / Math.PI / 90) * 90 % 360; if (out.rot < 0) out.rot += 360;
+      Object.assign(out, { codec: vt.codec, w: vt.video.width, h: vt.video.height, desc, nb: vt.nb_samples, timescale: vt.timescale });
+      f.setExtractionOptions(vt.id, null, { nbSamples: Infinity });
+      f.onSamples = (id, user, samples) => { for (const sm of samples) out.samples.push(sm); if (out.samples.length >= out.nb) resolve(out); };
+      f.start();
+    };
+    buf.fileStart = 0; f.appendBuffer(buf); f.flush();
+    setTimeout(() => { if (out.samples.length) resolve(out); else reject(new Error('no samples')); }, 0);
+  });
+}
+/* ---------- orientation: compare a decoded frame with what Chrome shows, pick the matching rotation/flip ---------- */
+function drawOriented(ctx, src, dw, dh, o){
+  ctx.save(); ctx.translate(dw/2, dh/2); ctx.rotate(o.rot * Math.PI / 180); if (o.flip) ctx.scale(-1, 1);
+  const rw = o.rot % 180 ? dh : dw, rh = o.rot % 180 ? dw : dh;
+  ctx.drawImage(src, -rw/2, -rh/2, rw, rh); ctx.restore();
+}
+const orientDims = (dm, o) => o.rot % 180 ? [dm.h, dm.w] : [dm.w, dm.h];
+async function sampleFrame(dm, cfg, wantT){
+  // decode from the start until a frame at/after wantT, return it as a small canvas plus its time
+  return new Promise(async (resolve, reject) => {
+    let got = null; const sc = Math.min(1, 96 / Math.max(dm.w, dm.h));
+    const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(dm.w*sc)); cv.height = Math.max(1, Math.round(dm.h*sc));
+    const d = new VideoDecoder({ error: reject, output: vf => { try { const t = vf.timestamp / 1e6; if (!got && t >= wantT){ cv.getContext('2d').drawImage(vf, 0, 0, cv.width, cv.height); got = t; } } finally { vf.close(); } } });
+    try {
+      d.configure(cfg);
+      for (const sm of dm.samples){ if (got !== null) break; if (sm.cts / sm.timescale > wantT + 2) break;
+        d.decode(new EncodedVideoChunk({ type: sm.is_sync ? 'key' : 'delta', timestamp: Math.round(sm.cts * 1e6 / sm.timescale), data: sm.data }));
+        if (d.decodeQueueSize > 8) await new Promise(r => setTimeout(r, 1)); }
+      await d.flush(); d.close();
+      got !== null ? resolve({ cv, t: got }) : reject(new Error('no sample frame'));
+    } catch(e){ try { d.close(); } catch(_){} reject(e); }
+  });
+}
+async function refFrame(url, t){
+  const v = hiddenVideo(url);
+  try {
+    await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error('ref video')); setTimeout(() => rej(new Error('ref timeout')), 10000); });
+    await new Promise(res => { v.onseeked = res; v.currentTime = t + 0.001; });
+    await frameReady(v); await new Promise(r => setTimeout(r, 60));
+    const sc = Math.min(1, 96 / Math.max(v.videoWidth, v.videoHeight)); const cv = document.createElement('canvas'); cv.width = Math.round(v.videoWidth*sc); cv.height = Math.round(v.videoHeight*sc);
+    cv.getContext('2d').drawImage(v, 0, 0, cv.width, cv.height); return cv;
+  } finally { v.removeAttribute('src'); v.load(); v.remove(); }
+}
+async function detectOrient(it, dm, cfg){
+  if (it.orient) return it.orient;
+  const meta = { rot: dm.rot || 0, flip: false };
+  try {
+    const dur = dm.samples.length ? dm.samples[dm.samples.length-1].cts / dm.samples[0].timescale : 0;
+    const smp = await sampleFrame(dm, cfg, Math.min(1, dur / 2));
+    const ref = await refFrame(it.url, smp.t);
+    const RW = 24, RH = Math.max(1, Math.round(24 * ref.height / ref.width));
+    const gray = cv => { const c = document.createElement('canvas'); c.width = RW; c.height = RH; const x = c.getContext('2d', {willReadFrequently: true}); return [c, x]; };
+    const [rc, rx] = gray(); rx.drawImage(ref, 0, 0, RW, RH); const R = rx.getImageData(0, 0, RW, RH).data;
+    const refAspect = ref.width / ref.height; let best = null, second = null;
+    for (const rot of [0, 90, 180, 270]) for (const flip of [false, true]){
+      const o = { rot, flip }, [ow, oh] = orientDims({ w: smp.cv.width, h: smp.cv.height }, o);
+      if (Math.abs(ow / oh - refAspect) / refAspect > 0.06) continue;
+      const [tc, tx] = gray(); tx.save(); tx.scale(RW / ow, RH / oh); drawOriented(tx, smp.cv, ow, oh, o); tx.restore();
+      const T = tx.getImageData(0, 0, RW, RH).data; let sad = 0;
+      for (let i = 0; i < T.length; i += 4) sad += Math.abs((T[i]+T[i+1]+T[i+2]) - (R[i]+R[i+1]+R[i+2]));
+      if (!best || sad < best.sad){ second = best; best = { sad, o }; } else if (!second || sad < second.sad) second = { sad, o };
+    }
+    it.orientSure = !!(best && (!second || best.sad < second.sad * 0.7));
+    it.orient = best ? best.o : meta;
+  } catch(e){ console.warn('orient', e); it.orient = meta; }
+  return it.orient;
+}
+async function encodeAudio(abuf, segs, boost, muxer, aCfg){
+  const sr = 48000, ch = 2, total = segs.reduce((t,[a,b]) => t + b - a, 0);
+  const off = new OfflineAudioContext(ch, Math.max(1, Math.ceil(total * sr)), sr);
+  let inNode = off.createGain();
+  if (boost > 1){ const g = off.createGain(); g.gain.value = boost; const lim = off.createDynamicsCompressor(); lim.threshold.value = -2; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.003; lim.release.value = 0.2; inNode.connect(g); g.connect(lim); lim.connect(off.destination); }
+  else inNode.connect(off.destination);
+  let t = 0; for (const [a, b] of segs){ const s = off.createBufferSource(); s.buffer = abuf; s.connect(inNode); s.start(t, a, b - a); t += b - a; }
+  const rendered = await off.startRendering();
+  let err = null;
+  const enc = new AudioEncoder({ output: (c, meta) => muxer.addAudioChunk(c, meta), error: e => err = e });
+  enc.configure(aCfg);
+  const F = 1024 * 4, L = rendered.length, chans = [rendered.getChannelData(0), rendered.getChannelData(Math.min(1, rendered.numberOfChannels - 1))];
+  for (let i = 0; i < L; i += F){
+    const n = Math.min(F, L - i), data = new Float32Array(n * ch);
+    data.set(chans[0].subarray(i, i + n), 0); data.set(chans[1].subarray(i, i + n), n);
+    const ad = new AudioData({ format: 'f32-planar', sampleRate: sr, numberOfFrames: n, numberOfChannels: ch, timestamp: Math.round(i / sr * 1e6), data });
+    enc.encode(ad); ad.close();
+    if (enc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 0));
+  }
+  await enc.flush(); enc.close(); if (err) throw err;
+}
+async function exportFast(it){
+  await loadFastLibs();
+  let cancelled = false; const myJob = { cancel(){ cancelled = true; } }; jobs.add(myJob);
+  const chk = () => { if (cancelled) throw cancelErr(); };
+  it.status = 'กำลังทำ'; it.prog = 0; it.blob = null; drawList();
+  let dec = null, enc = null;
+  try {
+    const buf = await it.file.arrayBuffer(); chk();
+    const dm = await demux(buf.slice(0)); chk();
+    const dcfg = { codec: dm.codec, codedWidth: dm.w, codedHeight: dm.h, hardwareAcceleration: 'prefer-hardware' }; if (dm.desc) dcfg.description = dm.desc;
+    if (!(await VideoDecoder.isConfigSupported(dcfg)).supported){ delete dcfg.hardwareAcceleration; if (!(await VideoDecoder.isConfigSupported(dcfg)).supported) throw new Error('decoder unsupported ' + dm.codec); }
+    const orient = await detectOrient(it, dm, dcfg); chk();
+    if (!it.orientSure) throw new Error('orientation unsure');
+    const [dw, dh] = orientDims(dm, orient);
+    const [W, H] = dims(dw, dh);
+    let abuf = null; try { actx = actx || new AudioContext(); abuf = it.abuf || await actx.decodeAudioData(buf.slice(0)); } catch(e){ abuf = null; }
+    chk();
+    const dur = Math.max(...dm.samples.map(sm => (sm.cts + sm.duration) / sm.timescale), abuf ? abuf.duration : 0);
+    const tIn = Math.max(0, it.trimIn || 0), tOut = Math.min(dur, it.trimOut != null ? it.trimOut : dur);
+    let segs = ((frame.cutOn && abuf) ? findSegments(abuf, frame.cutMin) : [[0, dur]]).map(([a, b]) => [Math.max(a, tIn), Math.min(b, tOut)]).filter(([a, b]) => b - a > 0.05);
+    if (!segs.length) segs = [[tIn, tOut]];
+    const segOut = []; { let acc = 0; for (const [a, b] of segs){ segOut.push(acc); acc += b - a; } }
+    const mapT = t => { for (let i = 0; i < segs.length; i++){ const [a, b] = segs[i]; if (t >= a - 1e-4 && t < b) return segOut[i] + (t - a); } return -1; };
+    const outDur = segs.reduce((t, [a, b]) => t + b - a, 0) || 1;
+
+    const srcFps = Math.min(120, Math.max(24, Math.round(dm.samples.length / Math.max(0.1, dur))));
+    let vcfg = null;
+    for (const codec of ['avc1.640033', 'avc1.4d0033', 'avc1.42e033']){
+      for (const hw of ['prefer-hardware', 'no-preference']){
+        const c = { codec, width: W, height: H, bitrate: srcFps > 40 ? 16_000_000 : 12_000_000, framerate: srcFps, hardwareAcceleration: hw, avc: { format: 'avc' } };
+        if ((await VideoEncoder.isConfigSupported(c)).supported){ vcfg = c; break; }
+      }
+      if (vcfg) break;
+    }
+    if (!vcfg) throw new Error('encoder unsupported');
+    let aCfg = null, aCodec = null;
+    if (abuf && window.AudioEncoder){
+      for (const [codec, mux] of [['mp4a.40.2','aac'], ['opus','opus']]){
+        const c = { codec, sampleRate: 48000, numberOfChannels: 2, bitrate: 192000 };
+        if ((await AudioEncoder.isConfigSupported(c)).supported){ aCfg = c; aCodec = mux; break; }
+      }
+    }
+    if (abuf && !aCfg) throw new Error('audio encoder unsupported');
+    const muxer = new Mp4Muxer.Muxer({ target: new Mp4Muxer.ArrayBufferTarget(), fastStart: 'in-memory', firstTimestampBehavior: 'offset',
+      video: { codec: 'avc', width: W, height: H }, ...(aCfg ? { audio: { codec: aCodec, sampleRate: 48000, numberOfChannels: 2 } } : {}) });
+
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const ctx = c.getContext('2d');
+    const rc = document.createElement('canvas'); rc.width = dw; rc.height = dh; const rctx = rc.getContext('2d');
+    const texts = it.texts.slice(), cap = false; // keep the source frame rate
+    if (frame.teethOn && lmState === 'ready' && mpFiles){ try { landmarkers.set(ctx, await mpFiles()); } catch(e){} }
+    let encErr = null, decErr = null, done = 0, lastOut = -1;
+    enc = new VideoEncoder({ output: (ch, meta) => muxer.addVideoChunk(ch, meta), error: e => encErr = e });
+    enc.configure(vcfg);
+    dec = new VideoDecoder({ error: e => decErr = e, output: vf => {
+      try {
+        const t = vf.timestamp / 1e6, ot = mapT(t);
+        if (ot < 0 || ot <= lastOut || (cap && lastOut >= 0 && ot < lastOut + 1/30 - 0.004)){ return; }
+        lastOut = ot;
+        drawOriented(rctx, vf, dw, dh, orient);
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+        drawVideo(ctx, rc, W, H, it.mirror); drawAll(ctx, W, H, texts);
+        const out = new VideoFrame(c, { timestamp: Math.round(ot * 1e6), duration: cap ? 33333 : (vf.duration || 33333) });
+        enc.encode(out, { keyFrame: done % 60 === 0 }); out.close();
+        done++; it.prog = Math.min(1, ot / outDur); if (it.barEl) it.barEl.style.width = (it.prog*100) + '%';
+      } finally { vf.close(); }
+    }});
+    dec.configure(dcfg);
+    const lastNeeded = segs[segs.length - 1][1];
+    for (const sm of dm.samples){
+      chk(); if (encErr) throw encErr; if (decErr) throw decErr;
+      if (sm.dts / sm.timescale > lastNeeded + 1 && sm.is_sync) break;
+      while (dec.decodeQueueSize > 10 || enc.encodeQueueSize > 8) await new Promise(r => setTimeout(r, 1));
+      dec.decode(new EncodedVideoChunk({ type: sm.is_sync ? 'key' : 'delta', timestamp: Math.round(sm.cts * 1e6 / sm.timescale), duration: Math.round(sm.duration * 1e6 / sm.timescale), data: sm.data }));
+    }
+    await dec.flush(); chk(); await enc.flush(); chk();
+    if (encErr) throw encErr; if (!done) throw new Error('no frames');
+    if (abuf){ msgSub('กำลังเข้ารหัสเสียง…'); await encodeAudio(abuf, segs, frame.boostOn ? frame.boost/100 : 1, muxer, aCfg); }
+    muxer.finalize();
+    it.ext = 'mp4'; it.blob = new Blob([muxer.target.buffer], { type: 'video/mp4' }); it.status = 'เสร็จแล้ว'; drawList();
+  } finally {
+    try { dec && dec.state !== 'closed' && dec.close(); } catch(e){}
+    try { enc && enc.state !== 'closed' && enc.close(); } catch(e){}
+    jobs.delete(myJob);
+  }
+}
+const msgSub = t => {};
+async function exportRealtime(it){
+  const mime = pickMime(); if (!mime) throw new Error('เบราว์เซอร์นี้ส่งออกวิดีโอไม่ได้ ลองใช้ Chrome หรือ Edge');
+  it.status='กำลังทำ'; it.prog=0; it.blob=null; drawList();
+  let cancelled = false, onCancel = () => {};
+  const myJob = { cancel(){ cancelled = true; onCancel(); } }; jobs.add(myJob);
+  const v = document.createElement('video'); v.src = it.url; v.playsInline = true; v.preload='auto'; v.muted = true;
+  Object.assign(v.style,{position:'fixed',left:'0',top:'0',width:'2px',height:'2px',opacity:'0.01',pointerEvents:'none'}); document.body.appendChild(v);
+  let srcs = [], rec = null, stopped = false;
+  const cleanup = () => { stopped = true; try { v.pause(); } catch(e){} try { rec && rec.state!=='inactive' && rec.stop(); } catch(e){} srcs.forEach(x => { try { x.stop(); x.disconnect(); } catch(e){} }); v.removeAttribute('src'); v.remove(); };
+  const guard = p => new Promise((res, rej) => { if (cancelled) return rej(cancelErr()); onCancel = () => rej(cancelErr()); p.then(res, rej); });
+  const seekTo = t => new Promise(r => { if (Math.abs(v.currentTime - t) < 0.01) return r(); v.onseeked = () => r(); v.currentTime = t; });
+  try {
+    await guard(new Promise((res,rej) => { v.onloadedmetadata = res; v.onerror = () => rej(new Error('เปิดไฟล์ '+it.name+' ไม่ได้')); }));
+    const [W, H] = dims(v.videoWidth, v.videoHeight);
+    const c = document.createElement('canvas'); c.width=W; c.height=H; const ctx = c.getContext('2d');
+    const dest = actx.createMediaStreamDestination();
+    let abuf = null; try { abuf = await guard(actx.decodeAudioData(await it.file.arrayBuffer())); } catch(e){ if (e.cancelled) throw e; abuf = null; }
+    const ain = actx.createGain(); audioChain(ain, dest, frame.boostOn ? frame.boost/100 : 1);
+    const stream = new MediaStream([...c.captureStream(30).getVideoTracks(), ...dest.stream.getAudioTracks()]);
+    rec = new MediaRecorder(stream, {mimeType:mime, videoBitsPerSecond: 8_000_000});
+    const chunks = []; rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+    const texts = it.texts.slice();
+    const draw = () => { ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H); drawVideo(ctx,v,W,H,it.mirror); drawAll(ctx,W,H,texts); };
+    if (frame.teethOn && lmState === 'ready' && mpFiles){ try { landmarkers.set(ctx, await guard(mpFiles())); } catch(e){ if (e.cancelled) throw e; } }
+    const dur = isFinite(v.duration) ? v.duration : (abuf ? abuf.duration : 0);
+    const tIn = Math.max(0, it.trimIn || 0), tOut = Math.min(dur, it.trimOut != null ? it.trimOut : dur);
+    const segs = ((frame.cutOn && abuf) ? findSegments(abuf, frame.cutMin) : [[0, dur]])
+      .map(([a, b]) => [Math.max(a, tIn), Math.min(b, tOut)]).filter(([a, b]) => b - a > 0.05);
+    if (!segs.length) segs.push([tIn, tOut]);
+    const total = segs.reduce((t, [a, b]) => t + (b - a), 0) || 1;
+    let doneDur = 0, seg = segs[0];
+    const done = new Promise(r => rec.onstop = r);
+    const tick = () => { if (stopped) return; draw(); it.prog = Math.min(1, (doneDur + Math.max(0, v.currentTime - seg[0])) / total); if (it.barEl) it.barEl.style.width = (it.prog*100)+'%';
+      setTimeout(tick, 33); };
+    for (let i = 0; i < segs.length; i++){
+      seg = segs[i]; const [a, b] = seg;
+      if (i > 0 && rec.state === 'recording') rec.pause();
+      await guard(seekTo(a)); draw();
+      if (i === 0){ rec.start(500); tick(); } else rec.resume();
+      let as = null;
+      if (abuf){ as = actx.createBufferSource(); as.buffer = abuf; as.connect(ain); srcs.push(as); }
+      await guard(v.play()); if (as) as.start(0, a, b - a);
+      await guard(new Promise(r => { const chk = () => { if (stopped || v.ended || v.currentTime >= b - 0.015) r(); else setTimeout(chk, 8); }; chk(); }));
+      v.pause(); if (as) { try { as.stop(); } catch(e){} }
+      doneDur += b - a;
+    }
+    stopped = true; draw();
+    rec.stop(); await done; cleanup();
+    it.ext = mime.startsWith('video/mp4') ? 'mp4' : 'webm';
+    it.blob = new Blob(chunks, {type: mime.split(';')[0]}); it.status='เสร็จแล้ว'; drawList();
+  } catch(e){ cleanup(); throw e; }
+  finally { jobs.delete(myJob); }
+}
+/* ---------- dead-air detection ---------- */
+function findSegments(abuf, minSil){
+  const sr = abuf.sampleRate, win = Math.max(1, Math.round(sr * 0.03)), n = Math.floor(abuf.length / win), dur = abuf.duration;
+  if (n < 10) return [[0, dur]];
+  const chs = []; for (let c = 0; c < abuf.numberOfChannels; c++) chs.push(abuf.getChannelData(c));
+  const db = new Float32Array(n);
+  for (let i = 0; i < n; i++){
+    let sum = 0;
+    for (let j = i*win, e = j + win; j < e; j += 2){ let x = 0; for (const d of chs) x += d[j]; x /= chs.length; sum += x*x; }
+    db[i] = 10 * Math.log10(sum / (win/2) + 1e-12);
+  }
+  const sorted = Array.from(db).sort((a,b) => a-b), pct = q => sorted[Math.min(n-1, Math.floor(q*n))];
+  const floor = pct(0.1), loud = pct(0.95);
+  if (loud - floor < 8) return [[0, dur]];
+  const thr = Math.max(floor + 6, floor + 0.35*(loud - floor));
+  const minRun = Math.round(minSil / 0.03 * (win / (sr*0.03))), pad = 0.12;
+  const gaps = []; let st = -1;
+  for (let i = 0; i <= n; i++){
+    const quiet = i < n && db[i] < thr;
+    if (quiet && st < 0) st = i;
+    if (!quiet && st >= 0){ if (i - st >= minRun){ const a = st*win/sr + (st ? pad : 0), b = i >= n ? dur : i*win/sr - pad; if (b - a > 0.05) gaps.push([a, b]); } st = -1; }
+  }
+  const segs = []; let t = 0;
+  for (const [a, b] of gaps){ if (a - t > 0.05) segs.push([t, a]); t = b; }
+  if (dur - t > 0.05) segs.push([t, dur]);
+  return segs.length ? segs : [[0, dur]];
+}
+async function analyzeCut(it){
+  if (!it || !frame.cutOn) return;
+  const key = frame.cutMin;
+  if (it.segKey === key && it.segs) return showCutInfo();
+  if (it === items[cur]) $('#cutInfo').textContent = 'กำลังวิเคราะห์เสียง…';
+  try {
+    actx = actx || new AudioContext();
+    if (!it.abuf) it.abuf = await actx.decodeAudioData(await it.file.arrayBuffer());
+    it.segs = findSegments(it.abuf, key); it.segKey = key;
+  } catch(e){ it.segs = null; it.segKey = key; }
+  showCutInfo();
+}
+function showCutInfo(){
+  const it = items[cur], el = $('#cutInfo');
+  if (!it){ el.textContent = 'เลือกคลิปเพื่อดูว่าจะตัดออกกี่วินาที'; return; }
+  if (!it.segs){ el.textContent = 'คลิปนี้ไม่มีเสียง หรืออ่านเสียงไม่ได้ — ส่งออกแบบไม่ตัด'; return; }
+  const dur = it.abuf ? it.abuf.duration : 0, keep = it.segs.reduce((t,[a,b]) => t + b - a, 0), cut = dur - keep;
+  el.textContent = cut < 0.1 ? 'คลิปนี้ไม่มีช่วงเงียบที่ต้องตัด' : `ตัด ${it.segs.length - 1 || 1} ช่วง รวม ${cut.toFixed(1)} วิ (จาก ${dur.toFixed(1)} เหลือ ${keep.toFixed(1)} วิ) · กด ▶ เพื่อดูผล`;
+}
+function paintCut(){ $('#cutOn').checked = frame.cutOn; $('#cutBox').hidden = !frame.cutOn; $('#cutMin').value = frame.cutMin; $('#cutMinVal').textContent = frame.cutMin.toFixed(1) + ' วิ'; }
+$('#cutOn').addEventListener('change', e => { frame.cutOn = e.target.checked; paintCut(); fxChanged(); if (frame.cutOn) analyzeCut(items[cur]); });
+$('#cutMin').addEventListener('input', e => { frame.cutMin = +e.target.value; paintCut(); save(); });
+$('#cutMin').addEventListener('change', () => { fxChanged(); analyzeCut(items[cur]); });
+function cutSkip(){
+  if (!frame.cutOn || cur < 0 || pv.paused) return;
+  const segs = items[cur].segs; if (!segs) return;
+  const t = pv.currentTime;
+  if (segs.some(([a,b]) => t >= a - 0.02 && t < b)) return;
+  const next = segs.find(([a]) => a > t);
+  if (next) pv.currentTime = next[0]; else { pv.pause(); $('#play').textContent = '▶'; }
+}
+paintCut();
+function setBusy(on){
+  busy = on; $('#expOne').disabled = on || cur<0; $('#expAll').disabled = on || !items.length; updSaveAll();
+  $('#cancel').hidden = !on; $('#folder').disabled = on;
+}
+async function run(list){
+  if (busy) return;
+  if (server){ if (!server.folder){ const ok = await pickServerFolder(); if (!ok) return; } }
+  else if (dir){ try { if ((await dir.queryPermission({mode:'readwrite'})) !== 'granted' && (await dir.requestPermission({mode:'readwrite'})) !== 'granted'){ showDest('err', dir.name, 'ไม่ได้รับสิทธิ์บันทึกลงโฟลเดอร์นี้ กด “เลือก” เพื่อเลือกใหม่'); dir = null; return; } showDest('ok', dir.name, 'วิดีโอที่ส่งออกจะถูกบันทึกลงโฟลเดอร์นี้อัตโนมัติ'); } catch(e){ dir = null; } }
+  if (!server && pickerOk && !dir && !useDownloads){ const r = await pickFolder(); if (r !== true) return; }
+  setBusy(true);
+  try { actx = actx || new AudioContext(); actx.resume(); } catch(e){ msg('เริ่มระบบเสียงไม่ได้ ลองรีเฟรชหน้า','err'); setBusy(false); return; }
+  let done = 0; const t0 = performance.now(); runCancelled = false;
+  // iPhone / claude.ai: one confirm per file is slow — collect everything, then save in one go
+  const batchSave = !server && !dir && list.length > 1;
+  const fast = !!(window.VideoEncoder && window.VideoDecoder && frame.fastExport !== false);
+  const totalMB = list.reduce((t, it) => t + it.file.size, 0) / 1e6;
+  const N = fast ? Math.min(list.length, totalMB > 1500 ? 1 : (navigator.hardwareConcurrency || 4) >= 6 ? 3 : 2) : 1;
+  try {
+    let next = 0, firstErr = null;
+    const showProg = () => msg(`กำลังส่งออก ${done}/${list.length} เสร็จแล้ว · ทำพร้อมกัน ${N} คลิป`);
+    const worker = async () => {
+      while (!firstErr && !runCancelled && next < list.length){
+        const it = list[next++]; showProg();
+        try { await exportItem(it); done++; if (!batchSave) queueSave(it); showProg(); }
+        catch(e){ if (!firstErr) firstErr = e; jobs.forEach(j => j.cancel()); }
+      }
+    };
+    await Promise.all(Array.from({length: N}, worker));
+    if (firstErr) throw firstErr; if (runCancelled) throw cancelErr();
+    const took = ((performance.now() - t0) / 1000).toFixed(1), mode = lastExportMode === 'fast' ? 'โหมดเร็ว (การ์ดจอ)' : 'โหมดเวลาจริง';
+    if (batchSave){ updSaveAll(); msg(`เสร็จ ${done} คลิป · ใช้เวลา ${((performance.now() - t0) / 1000).toFixed(1)} วิ — กด “บันทึกทั้งหมด” ครั้งเดียวเพื่อเก็บทุกคลิป`); setBusy(false); return; }
+    msg((server && server.folder ? `เสร็จ ${done} คลิป — บันทึกลง ${server.folder} แล้ว` : dir ? `เสร็จ ${done} คลิป — บันทึกลงโฟลเดอร์ “${dir.name}” แล้ว`  : `เสร็จ ${done} คลิป`) + ` · ใช้เวลา ${took} วิ · ${mode}`);
+  } catch(e){
+    list.forEach(it => { if (!it.blob) { it.status='พร้อม'; it.prog=0; } }); drawList();
+    if (e.cancelled) msg(done ? `ยกเลิกแล้ว — ทำเสร็จไป ${done} คลิปก่อนกดยกเลิก` : 'ยกเลิกแล้ว');
+    else msg(e.message || 'ส่งออกไม่สำเร็จ', 'err');
+  }
+  setBusy(false);
+}
+$('#cancel').onclick = () => { runCancelled = true; jobs.forEach(j => j.cancel()); };
+
+/* ---------- destination folder ---------- */
+const idb = () => new Promise((res, rej) => { const q = indexedDB.open('vts', 1); q.onupgradeneeded = () => q.result.createObjectStore('kv'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+async function idbPut(k, v){ try { const d = await idb(); d.transaction('kv','readwrite').objectStore('kv').put(v, k); } catch(e){} }
+async function idbGet(k){ try { const d = await idb(); return await new Promise(r => { const q = d.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); } catch(e){ return null; } }
+function showDest(state, name, sub){
+  $('#dest').dataset.s = state; $('#folderName').textContent = name; $('#folderSub').textContent = sub;
+  $('#folder').textContent = state==='ok' ? 'เปลี่ยน' : 'เลือก';
+}
+function folderNote(t, k, alt){ const n = $('#folderNote'); n.hidden = !t; $('#folderNoteText').textContent = t||''; n.dataset.k = k||''; $('#folderAlt').hidden = !alt; }
+const errText = e => e ? `${e.name||'Error'}: ${e.message||''}`.trim() : 'ไม่ทราบสาเหตุ';
+async function pickFolder(){
+  folderNote('');
+  let h;
+  try { h = await window.showDirectoryPicker({id:'vts-out', mode:'readwrite'}); }
+  catch(e){
+    if (e && e.name === 'AbortError'){
+      showDest(dir ? 'ok' : 'err', dir ? dir.name : 'ยังไม่ได้เลือกโฟลเดอร์', dir ? 'ใช้โฟลเดอร์เดิมอยู่' : 'เบราว์เซอร์ตอบกลับว่า: ' + errText(e));
+      if (location.protocol === 'file:'){ folderNote('Chrome ไม่ยอมให้ไฟล์ที่เปิดแบบดับเบิลคลิก (ที่อยู่ขึ้นต้นด้วย File) บันทึกลงโฟลเดอร์ ให้ปิดหน้านี้ แล้วดับเบิลคลิก “เปิดสตูดิโอ.bat” ในโฟลเดอร์โปรแกรมแทน โปรแกรมจะเปิดใน Chrome แล้วเลือกโฟลเดอร์ได้', 'err', true); return 'abort'; }
+      folderNote('หน้าต่างเลือกโฟลเดอร์ถูกปิดก่อนเลือกเสร็จ สาเหตุที่พบบ่อย: (1) เลือกรากไดรฟ์ เช่น D:\\ ตรงๆ เบราว์เซอร์ไม่อนุญาต ต้องเข้าไปในโฟลเดอร์ เช่น D:\\TikTok ก่อนแล้วกด “เลือกโฟลเดอร์” (2) หลังเลือกโฟลเดอร์ เบราว์เซอร์จะถามว่าอนุญาตให้แก้ไขไฟล์ไหม ต้องกดอนุญาต ไม่ใช่ยกเลิก ถ้ายังไม่ได้ ใช้ปุ่มด้านล่างแทนได้', '', true);
+      return 'abort';
+    }
+    showDest('err', 'เลือกโฟลเดอร์ไม่ได้', 'เบราว์เซอร์ตอบกลับว่า: ' + errText(e));
+    folderNote('เลือกโฟลเดอร์ไม่ได้ในหน้านี้ ใช้ปุ่มด้านล่างเพื่อส่งออกไปที่โฟลเดอร์ดาวน์โหลดแทน', 'err', true);
+    return 'abort';
+  }
+  try {
+    let p = await h.queryPermission({mode:'readwrite'});
+    if (p !== 'granted') p = await h.requestPermission({mode:'readwrite'});
+    if (p !== 'granted') throw Object.assign(new Error('ไม่ได้รับอนุญาตให้แก้ไขไฟล์'), {name:'NotAllowedError'});
+    const t = await h.getFileHandle('.vts-test', {create:true}); const w = await t.createWritable(); await w.write('ok'); await w.close();
+    try { await h.removeEntry('.vts-test'); } catch(e){}
+  } catch(e){
+    showDest('err', h.name, 'บันทึกลงโฟลเดอร์นี้ไม่ได้ — ' + errText(e));
+    folderNote('เลือกโฟลเดอร์ได้แต่เขียนไฟล์ไม่ได้ ลองเลือกโฟลเดอร์อื่น หรือใช้ปุ่มด้านล่าง', 'err', true);
+    return 'abort';
+  }
+  dir = h; useDownloads = false; idbPut('dir', h);
+  showDest('ok', h.name, 'ทดสอบเขียนไฟล์ผ่านแล้ว วิดีโอที่ส่งออกจะถูกบันทึกลงโฟลเดอร์นี้อัตโนมัติ');
+  return true;
+}
+function useDownloadFolder(){
+  useDownloads = true; dir = null; folderNote('');
+  showDest('ok', 'โฟลเดอร์ดาวน์โหลด', 'อยากให้ไปลงไดรฟ์ D: ให้ตั้งใน Chrome: ตั้งค่า → ดาวน์โหลด → ตำแหน่ง → เปลี่ยนเป็น D:\\TikTok');
+  $('#folder').textContent = 'เลือกโฟลเดอร์';
+}
+$('#useDl').onclick = useDownloadFolder;
+function showFolderNote(){
+  $('#folder').disabled = true;
+  if (embedded){
+    if (inClaude()){
+      showDest('none', 'บันทึกผ่านหน้าต่างบันทึก', 'หน้านี้เปิดอยู่ใน Claude ซึ่งเลือกโฟลเดอร์ไม่ได้ ไฟล์จะขึ้นหน้าต่างบันทึกทันทีที่แต่ละคลิปเสร็จ');
+      folderNote('ถ้าอยากเลือกโฟลเดอร์เอง ให้ดาวน์โหลดไฟล์โปรแกรม .html ที่ส่งให้ในแชทลงเครื่อง แล้วดับเบิลคลิกเปิดด้วย Chrome หรือ Edge');
+    } else {
+      showDest('err', 'บันทึกไม่ได้ในหน้าตัวอย่างนี้', 'หน้านี้เป็นหน้าตัวอย่างไฟล์ ไม่ใช่ตัวโปรแกรม');
+      folderNote('ให้กดดาวน์โหลดไฟล์ .html ลงเครื่องก่อน แล้วดับเบิลคลิกเปิดไฟล์นั้นด้วย Chrome หรือ Edge', 'err');
+    }
+    return;
+  }
+  useDownloads = true;
+  showDest('err', 'โฟลเดอร์ดาวน์โหลด', 'เบราว์เซอร์นี้เลือกโฟลเดอร์ไม่ได้ ไฟล์จะไปอยู่ในโฟลเดอร์ดาวน์โหลดแทน');
+  folderNote('ใช้ Google Chrome หรือ Microsoft Edge บนคอมพิวเตอร์เพื่อเลือกโฟลเดอร์เองได้ (Brave, Safari, Firefox และมือถือยังทำไม่ได้)');
+}
+async function restoreFolder(){
+  if (!pickerOk) return;
+  const h = await idbGet('dir'); if (!h) return;
+  dir = h;
+  let p = 'prompt'; try { p = await h.queryPermission({mode:'readwrite'}); } catch(e){}
+  showDest('ok', h.name, p==='granted' ? 'วิดีโอที่ส่งออกจะถูกบันทึกลงโฟลเดอร์นี้อัตโนมัติ' : 'ใช้โฟลเดอร์เดิมจากครั้งก่อน — ตอนกดส่งออก เบราว์เซอร์จะขออนุญาตอีกครั้ง');
+}
+$('#folder').onclick = () => server ? pickServerFolder() : pickFolder();
+
+/* ---------- local helper (เปิดสตูดิโอ.bat) : real Windows folder dialog + full path ---------- */
+async function api(path, opts){ const res = await fetch('/api/' + path, opts); if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); }
+function showServerFolder(){
+  if (server.folder){ showDest('ok', server.folder, 'วิดีโอที่ส่งออกจะถูกบันทึกลงโฟลเดอร์นี้อัตโนมัติ'); $('#openFolder').hidden = false; }
+  else { showDest('none', 'ยังไม่ได้เลือกโฟลเดอร์', 'กด “เลือก” แล้วหน้าต่างเลือกโฟลเดอร์ของ Windows จะเด้งขึ้นมา'); $('#openFolder').hidden = true; }
+}
+async function pickServerFolder(){
+  folderNote('หน้าต่างเลือกโฟลเดอร์ของ Windows เปิดแล้ว ถ้าไม่เห็น ให้ดูที่แถบงานด้านล่าง (ไอคอน Video Title Studio)');
+  $('#folder').disabled = true;
+  try {
+    const r = await api('pick', {method:'POST'});
+    folderNote('');
+    if (r.path){ server.folder = r.path; showServerFolder(); return true; }
+    showServerFolder(); return false;
+  } catch(e){ folderNote('เปิดหน้าต่างเลือกโฟลเดอร์ไม่ได้ — ตรวจว่าหน้าต่างสีดำ “Video Title Studio” ยังเปิดอยู่ (' + errText(e) + ')', 'err'); return false; }
+  finally { $('#folder').disabled = false; }
+}
+$('#openFolder').onclick = () => api('open', {method:'POST'}).catch(() => {});
+/* ---------- presets ---------- */
+let presets = [];
+const BUILTIN_PRESETS = [{"name":"asdsadasd","saved":"2026-11-08T04:48:16.284Z","boxes":[{"on":true,"font":"Kanit","size":8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":true,"bgColor":"#ffd400","bgOp":66,"radius":4,"x":0.47984362082201476,"y":0.13590652767397443},{"on":false,"font":"Kanit","size":5.5,"bold":false,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#111111","bgOp":75,"radius":14,"x":0.5,"y":0.27},{"on":false,"font":"Kanit","size":6,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#e0245e","bgOp":90,"radius":14,"x":0.5,"y":0.66},{"on":false,"font":"Kanit","size":5.5,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#ffffff","bgOp":90,"radius":14,"x":0.5,"y":0.45}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":true,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":7,"contrast":0,"sharpness":36},"texts":["ไฟโซล่าเซลล์  1000w","ช่องของฉัน","กดติดตาม","ข้อความกล่อง 4"]},{"name":"aaaaaaaaaaaaaa","saved":"2026-11-08T04:48:24.181Z","boxes":[{"on":true,"font":"Kanit","size":8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":true,"bgColor":"#ffd400","bgOp":66,"radius":4,"x":0.44204983317585905,"y":0.39526543815396115},{"on":false,"font":"Kanit","size":5.5,"bold":false,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#111111","bgOp":75,"radius":14,"x":0.5,"y":0.27},{"on":false,"font":"Kanit","size":6,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#e0245e","bgOp":90,"radius":14,"x":0.5,"y":0.66},{"on":false,"font":"Kanit","size":5.5,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#ffffff","bgOp":90,"radius":14,"x":0.5,"y":0.45}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":true,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":7,"contrast":0,"sharpness":36},"texts":["ไฟโซล่าเซลล์  1000w","ช่องของฉัน","กดติดตาม","ข้อความกล่อง 4"]},{"name":"ไฟ1000","saved":"2026-11-08T04:57:42.232Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Kanit","size":4.8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":true,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5018899200572813,"y":0.06263637165753197},{"padX":90,"padY":20,"on":true,"font":"Prompt","size":3.6,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.35827306565194283,"y":0.09735924265072245},{"padX":25,"padY":0,"on":true,"font":"Kanit","size":3.8,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6404667569682295,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":3.9,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#111111","bgOp":100,"radius":14,"x":0.5012599467048541,"y":0.12544706807424016}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":true,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":7,"contrast":0,"sharpness":36},"texts":["ไฟโซล่าเซลล์  1000w","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","รับประกัน  30  ปี"]},{"name":"ไฟ1000w","saved":"2026-11-08T05:25:13.060Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Kanit","size":4.8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":true,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5018899200572813,"y":0.06263637165753197},{"padX":90,"padY":20,"on":true,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":true,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":4.2,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#111111","bgOp":100,"radius":14,"x":0.48992181041100735,"y":0.13182471376224877}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":7,"contrast":0,"sharpness":36},"texts":["ไฟโซล่าเซลล์  1000w","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","รับประกัน  30  ปี"]},{"name":"ไฟ2000000w","saved":"2026-11-08T05:30:04.783Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":4.3,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#ffffff","bg":true,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5018899200572813,"y":0.06263637165753197},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":4.2,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.491181526440888,"y":0.09710177789196145}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":7,"contrast":0,"sharpness":36},"texts":["ไฟโซล่าเซลล์  200000w","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","รับประกัน  30  ปี"]},{"name":"ไฟ2แผง","saved":"2026-11-08T05:40:26.382Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":4.3,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#ffffff","bg":true,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5018899200572813,"y":0.06263637165753197},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":4.2,"bold":true,"align":"center","color":"#ffffff","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.491181526440888,"y":0.09710177789196145}],"frame":{"ratio":"9:16","fit":"blur","safe":true,"boostOn":true,"boost":340,"beautyOn":true,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":true,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":0,"contrast":10,"sharpness":36},"texts":["ไฟโซล่าเซลล์ ใช้แผง 2 แผง","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","รับประกัน  30  ปี"]},{"name":"แตะๆ","saved":"2026-11-08T10:10:26.661Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":6.9,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.4729146059702375,"y":0.1370426164673642},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":15.7,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.7847133540510217,"y":0.21686042211634277}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.8,"brightness":7,"contrast":4,"sharpness":31},"texts":["แตะยอดฮิตลดราคา","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-70"]},{"name":"สเปร์ยกำจัดไรฝุ่น","saved":"2026-11-08T10:15:24.309Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":18.9,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.9431289619233648,"y":0.20577977080219237}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.4,"brightness":20,"contrast":13,"sharpness":31},"texts":["สเปรย์กำจัดไรฝุ่น","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","15.-"]},{"name":"ยาสีฟัน","saved":"2026-11-08T10:25:20.454Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":13.2,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.8544555177114572,"y":0.17176548746055476}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.4,"brightness":20,"contrast":13,"sharpness":31},"texts":["ยาสีฟันสมุนไพร","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-40%"]},{"name":"กำจัดเห็บหมัด","saved":"2026-11-08T10:27:54.030Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":13.2,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.7694456023039641,"y":0.17176548746055476}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.4,"brightness":33,"contrast":13,"sharpness":31},"texts":["กำจัดเห็บหมัด","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-100"]},{"name":"ไฟเบอร์","saved":"2026-11-08T10:35:55.855Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":11.4,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5056690681469234,"y":0.10940601125228365},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":14.4,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.7955750018084491,"y":0.18593811633241988}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.4,"brightness":33,"contrast":13,"sharpness":63},"texts":["ไฟเบอร์","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-40%"]},{"name":"แอปเปิ้ล","saved":"2026-11-08T10:37:09.519Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":8,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5056690681469234,"y":0.10940601125228365},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":14.4,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.7955750018084491,"y":0.18593811633241988}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.4,"brightness":39,"contrast":13,"sharpness":63},"texts":["แอบเปิ้ลไซเดอร์","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-40%"]},{"name":"ที่จับโทรศัพท์","saved":"2026-11-10T08:22:26.095Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":8,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5094484469115389,"y":0.08106075350855338},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":14.4,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.7808409256004875,"y":0.17460003269805677}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":-1.1,"brightness":33,"contrast":13,"sharpness":91},"texts":["ที่จับโทรศัพท์กันสั่น","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-100"]},{"name":"แวกซ์สีม่วง","saved":"2026-11-10T08:32:13.463Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":14.4,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.8299156625378132,"y":0.18593811633241988}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":8,"contrast":13,"sharpness":31},"texts":["แวกซ์จัดแต่งผม","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","49.-"]},{"name":"ลูกอมโพรไบโอติก","saved":"2026-11-10T08:35:09.599Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":11.6,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.8207709371308773,"y":0.16255329653504405}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":8,"contrast":13,"sharpness":31},"texts":["ลูกอมโพรไบโอติก","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-40%"]},{"name":"ลูกอมดับกลิ่นปาก","saved":"2026-11-10T08:36:33.079Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":7.7,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.47795370076473376,"y":0.09877654770802188},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":11.6,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.8207709371308773,"y":0.16255329653504405}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.2,"brightness":8,"contrast":13,"sharpness":31},"texts":["ลูกอมดับกลิ่นปาก","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","-40%"]},{"name":"แท่งเก็บลูกผม","saved":"2026-11-10T08:39:25.094Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":6.9,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5056690681469234,"y":0.10940601125228365},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.3355970237392229,"y":0.09877651526947355},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":4.1,"bold":true,"align":"center","color":"#111111","stroke":false,"strokeColor":"#000000","bg":true,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.6467657984675799,"y":0.0980678627408238},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":14.4,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.8299156625378132,"y":0.18593811633241988}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.5,"brightness":16,"contrast":2,"sharpness":34},"texts":["แท่งเก็บลูกผม","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","49.-"]},{"name":"เวย์ถั่ว","saved":"2026-11-10T08:41:49.638Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":6.9,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.5056690681469234,"y":0.10940601125228365},{"padX":90,"padY":20,"on":true,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.40110617876756827,"y":0.2234955650016609},{"padX":25,"padY":0,"on":true,"font":"Kanit","size":14.8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.8382543994330931,"y":0.19373303463917954},{"padX":105,"padY":0,"on":true,"font":"Kanit","size":8.9,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.3817797993540543,"y":0.17247413998920452}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.5,"brightness":16,"contrast":2,"sharpness":34},"texts":["เวย์โปรตีนถั่วเหลือง","แพ้นมวัวทานได้","199.-","ฟรีแก้วเชก"]},{"name":"moritek","saved":"2026-11-10T08:44:10.126Z","boxes":[{"padX":65,"padY":25,"on":true,"font":"Prompt","size":8.8,"bold":true,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#111111","bg":false,"bgColor":"#111111","bgOp":100,"radius":7,"x":0.519526867175505,"y":0.16397056915379504},{"padX":90,"padY":20,"on":false,"font":"Prompt","size":4,"bold":false,"align":"center","color":"#ffffff","stroke":true,"strokeColor":"#000000","bg":true,"bgColor":"#ff3b30","bgOp":100,"radius":8,"x":0.40110617876756827,"y":0.2234955650016609},{"padX":25,"padY":0,"on":false,"font":"Kanit","size":14.8,"bold":true,"align":"center","color":"#111111","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#fafafa","bgOp":90,"radius":4,"x":0.8382543994330931,"y":0.19373303463917954},{"padX":105,"padY":0,"on":false,"font":"Kanit","size":8.9,"bold":true,"align":"center","color":"#ff3b30","stroke":true,"strokeColor":"#ffffff","bg":false,"bgColor":"#ff3b30","bgOp":100,"radius":14,"x":0.3817797993540543,"y":0.17247413998920452}],"frame":{"ratio":"9:16","fit":"blur","safe":false,"boostOn":true,"boost":100,"beautyOn":false,"smooth":73,"bright":78,"cutOn":false,"cutMin":0.6,"teethOn":false,"teeth":80,"adjOn":true,"exposure":0.5,"brightness":16,"contrast":2,"sharpness":34},"texts":["สเปรย์หน้าตึง","เป็นโลหะ  ทนทาน","แผงใหญ่  70 cm","49.-"]}];
+const pmsg = (t, err) => { const m = $('#presetMsg'); m.textContent = t; m.style.color = err ? 'var(--warn)' : ''; };
+async function readPresets(){
+  let list = null;
+  if (server){ try { const r = await api('presets'); if (Array.isArray(r)) list = r; } catch(e){} }
+  if (!list || !list.length){ try { const l = JSON.parse(localStorage.getItem('vts-presets') || '[]'); if (Array.isArray(l) && l.length) list = l; } catch(e){} }
+  presets = list || [];
+  const have = new Set(presets.map(p => p.name)); let added = 0;
+  BUILTIN_PRESETS.forEach(p => { if (!have.has(p.name)){ presets.push(JSON.parse(JSON.stringify(p))); added++; } });
+  if (added) try { localStorage.setItem('vts-presets', JSON.stringify(presets)); } catch(e){}
+  fillPresets();
+}
+async function writePresets(){
+  try { localStorage.setItem('vts-presets', JSON.stringify(presets)); } catch(e){}
+  if (server){ try { await api('presets', {method:'POST', body: JSON.stringify(presets)}); } catch(e){ pmsg('บันทึกลงไฟล์ไม่ได้ — เก็บไว้ในเบราว์เซอร์แทน', true); } }
+}
+function fillPresets(sel){
+  const s = $('#presetSel'); s.innerHTML = '';
+  if (!presets.length){ s.innerHTML = '<option value="">— ยังไม่มีชุดที่บันทึก —</option>'; }
+  presets.forEach(p => { const o = document.createElement('option'); o.value = p.name; o.textContent = p.name + (p.texts ? ' (มีข้อความ)' : ''); s.appendChild(o); });
+  if (sel) s.value = sel;
+  $('#presetLoad').disabled = $('#presetDel').disabled = !presets.length;
+}
+$('#presetSave').onclick = async () => {
+  const name = $('#presetName').value.trim();
+  if (!name){ pmsg('พิมพ์ชื่อชุดก่อนกดบันทึก', true); $('#presetName').focus(); return; }
+  const p = { name, saved: new Date().toISOString(), boxes: JSON.parse(JSON.stringify(boxes)), frame: JSON.parse(JSON.stringify(frame)) };
+  if ($('#presetTexts').checked) p.texts = textsOf().slice();
+  const i = presets.findIndex(x => x.name === name);
+  if (i >= 0) presets[i] = p; else presets.push(p);
+  await writePresets(); fillPresets(name); $('#presetName').value = '';
+  pmsg((i >= 0 ? 'อัปเดตชุด “' : 'บันทึกชุด “') + name + '” แล้ว');
+};
+$('#presetName').addEventListener('keydown', e => { if (e.key === 'Enter') $('#presetSave').click(); });
+$('#presetLoad').onclick = () => {
+  const p = presets.find(x => x.name === $('#presetSel').value); if (!p) return;
+  boxes = p.boxes.map(b => mk(b));
+  Object.assign(frame, p.frame);
+  if (p.texts){
+    const t = p.texts.slice(0, 4); while (t.length < 4) t.push('');
+    shared = t.slice(); items.forEach(it => it.texts = t.slice());
+  }
+  sel = 0; save();
+  paintFrame(); paintFx(); paintAdj(); paintTeeth(); paintCut(); syncControls(); fxChanged();
+  if (frame.teethOn) loadFaceModel();
+  if (frame.cutOn) items.forEach(it => { it.segKey = null; }), analyzeCut(items[cur]);
+  pmsg('ใช้ชุด “' + p.name + '” แล้ว' + (p.texts ? ' — ข้อความทั้ง 4 กล่องใส่ให้ทุกคลิปแล้ว' : ''));
+};
+let delArmed = null;
+$('#presetDel').onclick = async () => {
+  const name = $('#presetSel').value; if (!name) return;
+  if (delArmed !== name){ delArmed = name; pmsg('กด “ลบ” อีกครั้งเพื่อยืนยันการลบชุด “' + name + '”', true); setTimeout(() => { if (delArmed === name) delArmed = null; }, 4000); return; }
+  delArmed = null; presets = presets.filter(x => x.name !== name); await writePresets(); fillPresets(); pmsg('ลบชุด “' + name + '” แล้ว');
+};
+let resetArmed = false;
+$('#resetAll').onclick = () => {
+  if (!resetArmed){ resetArmed = true; pmsg('กดอีกครั้งเพื่อยืนยัน — สี ฟอนต์ ตำแหน่ง ข้อความ และการแต่งภาพ/เสียงจะกลับเป็นค่าเริ่มต้น (ชุดที่บันทึกไว้ไม่หาย)', true); setTimeout(() => resetArmed = false, 5000); return; }
+  resetArmed = false;
+  boxes = JSON.parse(DEF_BOXES).map(b => mk(b));
+  for (const k of Object.keys(frame)) delete frame[k]; Object.assign(frame, JSON.parse(DEF_FRAME));
+  shared = JSON.parse(DEF_SHARED); items.forEach(it => { it.texts = shared.slice(); it.mirror = false; });
+  $('#same').checked = false; $('#mirrorAll').checked = false; sel = 0; save();
+  paintFrame(); paintFx(); paintAdj(); paintTeeth(); paintCut(); syncControls(); fxChanged();
+  pmsg('ล้างการตั้งค่าแล้ว เริ่มใหม่ได้เลย');
+};
+let clearArmed = false;
+$('#clearClips').onclick = () => {
+  if (busy) return;
+  if (!clearArmed){ clearArmed = true; $('#clearClips').textContent = 'กดอีกครั้งเพื่อยืนยันล้างรายการ'; setTimeout(() => { clearArmed = false; $('#clearClips').textContent = 'ล้างรายการวิดีโอ'; }, 4000); return; }
+  clearArmed = false; $('#clearClips').textContent = 'ล้างรายการวิดีโอ';
+  pv.pause(); pv.removeAttribute('src'); pv.load(); $('#play').textContent = '▶';
+  items.forEach(it => { try { URL.revokeObjectURL(it.url); } catch(e){} });
+  items.length = 0; cur = -1; drawList(); sizeView(); syncControls(); showCutInfo();
+  $('#expOne').disabled = $('#expAll').disabled = true; $('#mhint').textContent = 'ตัวอย่างจำลอง — เพิ่มวิดีโอเพื่อดูของจริง';
+};
+/* ---------- undo / redo ---------- */
+const hist = [], fut = []; let lastSnap = null, applying = false, snapTimer = null;
+const snapState = () => JSON.stringify({ boxes, frame, shared,
+  it: items.map(i => ({ texts: i.texts, mirror: !!i.mirror, trimIn: i.trimIn || 0, trimOut: i.trimOut ?? null })) });
+function paintUndo(){ $('#undo').disabled = !hist.length; $('#redo').disabled = !fut.length; }
+function recordNow(){
+  clearTimeout(snapTimer); if (applying) return;
+  const st = snapState(); if (st === lastSnap) return;
+  if (lastSnap !== null){ hist.push(lastSnap); if (hist.length > 100) hist.shift(); fut.length = 0; }
+  lastSnap = st; paintUndo();
+}
+const recordSoon = (ms = 500) => { clearTimeout(snapTimer); snapTimer = setTimeout(recordNow, ms); };
+function applySnap(str){
+  applying = true;
+  const o = JSON.parse(str), prevCut = frame.cutOn, prevTeeth = frame.teethOn;
+  boxes = o.boxes.map(b => mk(b));
+  for (const k of Object.keys(frame)) delete frame[k]; Object.assign(frame, o.frame);
+  shared = o.shared.slice();
+  o.it.forEach((x, i) => { const it = items[i]; if (!it) return; it.texts = x.texts.slice(); it.mirror = x.mirror; it.trimIn = x.trimIn; it.trimOut = x.trimOut; });
+  if (sel >= boxes.length) sel = 0;
+  save(); paintFrame(); paintFx(); paintAdj(); paintTeeth(); paintCut(); syncControls(); fxChanged(); paintTimeline();
+  if (cur >= 0) $('#mirror').checked = !!items[cur].mirror;
+  if (frame.teethOn && !prevTeeth) loadFaceModel();
+  if (frame.cutOn && !prevCut) analyzeCut(items[cur]);
+  lastSnap = str; applying = false; paintUndo();
+}
+$('#undo').onclick = () => { recordNow(); if (!hist.length) return; fut.push(lastSnap); applySnap(hist.pop()); };
+$('#redo').onclick = () => { if (!fut.length) return; hist.push(lastSnap); applySnap(fut.pop()); };
+document.addEventListener('change', () => recordSoon(50), true);
+document.addEventListener('input', e => recordSoon(e.target && e.target.id === 'txt' ? 800 : 400), true);
+document.addEventListener('pointerup', () => recordSoon(60), true);
+document.addEventListener('click', e => { if (e.target.closest('button') && !e.target.closest('.undo')) recordSoon(60); }, true);
+document.addEventListener('keydown', e => {
+  const typing = e.target && (e.target.tagName === 'TEXTAREA' || (e.target.tagName === 'INPUT' && e.target.type === 'text'));
+  if (typing || !(e.ctrlKey || e.metaKey)) return;
+  const k = e.key.toLowerCase();
+  if (k === 'z' && !e.shiftKey){ e.preventDefault(); $('#undo').click(); }
+  else if (k === 'y' || (k === 'z' && e.shiftKey)){ e.preventDefault(); $('#redo').click(); }
+});
+setTimeout(() => { lastSnap = snapState(); paintUndo(); }, 0);
+/* ---------- phone tabs: group the settings panel by its section headings ---------- */
+(() => {
+  const panel = document.querySelector('.panel.settings'); if (!panel) return;
+  const map = { 'ชุดตั้งค่า': 'clips', 'รูปแบบวิดีโอ': 'format', 'กล่องข้อความ': 'text', 'เสียง': 'look', 'ส่งออก': 'export' };
+  let g = 'clips';
+  [...panel.children].forEach(el => {
+    if (el.tagName === 'H2'){ const k = Object.keys(map).find(k => el.textContent.trim().startsWith(k)); if (k) g = map[k]; }
+    el.dataset.mg = g;
+  });
+  const bin = document.querySelector('.bin');
+  let curTab = 'text';
+  try { curTab = localStorage.getItem('vts-mtab') || 'text'; } catch(e){}
+  function setTab(t){
+    curTab = t;
+    [...panel.children].forEach(el => el.classList.toggle('m-off', el.dataset.mg !== t));
+    if (bin) bin.classList.toggle('m-off', t !== 'clips' && items.length > 0);
+    document.querySelectorAll('#mtabs button').forEach(b => b.classList.toggle('on', b.dataset.mt === t));
+    try { localStorage.setItem('vts-mtab', t); } catch(e){}
+  }
+  document.querySelectorAll('#mtabs button').forEach(b => b.onclick = () => { setTab(b.dataset.mt); const top = document.querySelector('.monitor'); window.scrollTo({ top: Math.max(0, panel.offsetTop - (top ? top.offsetHeight : 0) - 10), behavior: 'smooth' }); });
+  setTab(curTab);
+  window.__refreshMobileBin = () => setTab(curTab);
+})();
+$('#presetExport').onclick = async () => {
+  const blob = new Blob([JSON.stringify(presets, null, 1)], { type: 'application/json' });
+  const name = 'presets.json';
+  if (dl){ try { await dl.save({ filename: name, data: blob }); pmsg('ส่งออกไฟล์ชุดตั้งค่าแล้ว'); } catch(e){ pmsg('ยกเลิกการส่งออก'); } return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  pmsg('ส่งออกไฟล์ชุดตั้งค่าแล้ว (presets.json)');
+};
+$('#presetImport').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try {
+    const list = JSON.parse((await f.text()).replace(/^﻿/, ''));
+    if (!Array.isArray(list)) throw new Error('bad');
+    let n = 0;
+    list.forEach(p => { if (!p || !p.name || !Array.isArray(p.boxes)) return; const i = presets.findIndex(x => x.name === p.name); if (i >= 0) presets[i] = p; else presets.push(p); n++; });
+    await writePresets(); fillPresets(); pmsg(`นำเข้า ${n} ชุดแล้ว`);
+  } catch(err){ pmsg('ไฟล์นี้ไม่ใช่ไฟล์ชุดตั้งค่าของสตูดิโอ', true); }
+});
+$('#zoomReset').onclick = resetZoom;
+readPresets();
+async function detectServer(){
+  if (location.protocol !== 'http:' || !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return false;
+  try { const r = await api('folder'); server = {folder: r.path || ''}; showServerFolder(); readPresets(); return true; } catch(e){ return false; }
+}
+
+/* ---------- saving ---------- */
+const outName = it => `${it.name.replace(/\.[^.]+$/,'')}-หัวข้อ.${it.ext}`;
+let saveChain = Promise.resolve();
+const queueSave = it => { saveChain = saveChain.then(() => saveItem(it)).catch(() => {}); };
+async function saveItem(it){
+  const name = outName(it);
+  if (server){
+    try { const r = await api('save?name=' + encodeURIComponent(name), {method:'POST', body: it.blob});
+      if (r.error) throw new Error(r.error); it.saved = true; it.savedPath = r.path; drawList(); return true; }
+    catch(e){ msg('บันทึกไม่สำเร็จ: ' + errText(e), 'err'); return false; }
+  }
+  if (dir){
+    try {
+      if ((await dir.queryPermission?.({mode:'readwrite'})) === 'prompt') await dir.requestPermission({mode:'readwrite'});
+      const fh = await dir.getFileHandle(name, {create:true}); const w = await fh.createWritable(); await w.write(it.blob); await w.close();
+      it.saved = true; drawList(); return true;
+    } catch(e){ msg('เขียนไฟล์ลงโฟลเดอร์ไม่ได้: ' + (e.message||e.name), 'err'); return false; }
+  }
+  if (dl){
+    try { await dl.save({filename:name, data:it.blob}); it.saved = true; drawList(); return true; }
+    catch(e){ if (e.code==='declined') msg('ข้ามการบันทึก '+it.name+' — กด “บันทึก” ที่คลิปเพื่อบันทึกอีกครั้ง'); else if (e.code==='rate_limited') msg('มีหน้าต่างบันทึกเปิดอยู่ รอสักครู่แล้วกด “บันทึก” ที่คลิป','err'); else msg('บันทึกไม่สำเร็จ ('+e.code+')','err'); return false; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(it.blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  it.saved = true; drawList(); return true;
+}
+$('#expOne').onclick = () => cur>=0 && run([items[cur]]);
+$('#expAll').onclick = () => items.length && run(items.slice());
+// minimal "stored" zip (no compression — videos are already compressed), UTF-8 names for Thai
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++){ let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+async function makeZip(entries){
+  const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+  for (const e of entries){
+    const data = new Uint8Array(await e.blob.arrayBuffer()); let crc = 0xFFFFFFFF;
+    for (let i = 0; i < data.length; i++) crc = CRC_T[(crc ^ data[i]) & 255] ^ (crc >>> 8);
+    crc = (crc ^ 0xFFFFFFFF) >>> 0; const nm = enc.encode(e.name);
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+    h.setUint32(14, crc, true); h.setUint32(18, data.length, true); h.setUint32(22, data.length, true); h.setUint16(26, nm.length, true);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+    c.setUint32(16, crc, true); c.setUint32(20, data.length, true); c.setUint32(24, data.length, true); c.setUint16(28, nm.length, true); c.setUint32(42, off, true);
+    parts.push(h.buffer, nm, e.blob); central.push(c.buffer, nm); off += 30 + nm.length + data.length;
+    await new Promise(r => setTimeout(r, 0));
+  }
+  const cdSize = central.reduce((t, x) => t + x.byteLength, 0), end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, entries.length, true); end.setUint16(10, entries.length, true); end.setUint32(12, cdSize, true); end.setUint32(16, off, true);
+  return new Blob([...parts, ...central, end.buffer], { type: 'application/zip' });
+}
+function updSaveAll(){ const b = $('#saveAll'); if (!b) return; const n = items.filter(it => it.blob && !it.saved).length; b.hidden = busy || !n; b.textContent = `บันทึกทั้งหมด (${n})`; }
+$('#saveAll').onclick = async () => {
+  const list = items.filter(it => it.blob && !it.saved); if (!list.length) return;
+  const files = list.map(it => new File([it.blob], outName(it), { type: it.blob.type || 'video/mp4' }));
+  // 1) share sheet: one tap "บันทึกวิดีโอ" saves every clip to Photos on iPhone
+  try {
+    if (navigator.canShare && navigator.canShare({ files })){
+      await navigator.share({ files }); list.forEach(it => it.saved = true); drawList(); msg(`ส่ง ${list.length} คลิปไปที่หน้าแชร์แล้ว — เลือก “บันทึกวิดีโอ” เพื่อเก็บลงรูปภาพ`); return;
+    }
+  } catch(e){ if (e && e.name === 'AbortError'){ msg('ปิดหน้าแชร์แล้ว — กด “บันทึกทั้งหมด” อีกครั้งได้'); return; } }
+  // 2) inside Claude: one zip = one confirmation for every clip
+  if (dl && list.length > 1){
+    msg(`กำลังรวม ${list.length} คลิปเป็นไฟล์เดียว…`);
+    try {
+      const zip = await makeZip(list.map(it => ({ name: outName(it), blob: it.blob })));
+      const d = new Date(), pad = n => String(n).padStart(2, '0');
+      await dl.save({ filename: `คลิปหัวข้อ-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.zip`, data: zip });
+      list.forEach(it => it.saved = true); drawList();
+      msg(`บันทึก ${list.length} คลิปเป็นไฟล์ ZIP แล้ว — เปิดแอปไฟล์ แตะไฟล์ ZIP เพื่อแตกไฟล์ แล้วเลือกคลิปทั้งหมด → แชร์ → บันทึกวิดีโอ`);
+    } catch(e){
+      if (e && e.code === 'declined') msg('ยกเลิกการบันทึก — กด “บันทึกทั้งหมด” อีกครั้งได้');
+      else if (e && e.code === 'rate_limited') msg('มีหน้าต่างบันทึกเปิดอยู่ รอสักครู่แล้วกดอีกครั้ง', 'err');
+      else msg('บันทึกไม่สำเร็จ (' + ((e && (e.code || e.message)) || 'ไม่ทราบสาเหตุ') + ')', 'err');
+    }
+    return;
+  }
+  // 3) fallback: one confirmation per file, back to back
+  let n = 0; for (const it of list){ msg(`กำลังบันทึก ${n+1}/${list.length}…`); if (await saveItem(it)) n++; else break; }
+  if (n === list.length) msg(`บันทึกครบ ${n} คลิปแล้ว`);
+};
+
+(async () => { try { dl = await window.claude?.use?.('downloads'); } catch(e){ dl = null; } if (await detectServer()) return; if (!pickerOk) showFolderNote(); else restoreFolder(); })();
+document.fonts && document.fonts.ready.then(() => ['Kanit','Prompt','Mitr','Sarabun','Chonburi'].forEach(f => document.fonts.load(`700 40px "${f}"`)));
+function sizeView(){ const [w,h] = cur>=0 && pv.videoWidth ? dims(pv.videoWidth, pv.videoHeight) : dims(1280,720); if (view.width!==w) view.width=w; if (view.height!==h) view.height=h; }
+function paintFrame(){
+  document.querySelectorAll('#ratio button').forEach(b => b.classList.toggle('on', b.dataset.r===frame.ratio));
+  document.querySelectorAll('#fit button').forEach(b => b.classList.toggle('on', b.dataset.f===frame.fit));
+  $('#safe').checked = frame.safe; sizeView();
+}
+document.querySelectorAll('#ratio button').forEach(b => b.onclick = () => { frame.ratio = b.dataset.r; paintFrame(); save(); });
+document.querySelectorAll('#fit button').forEach(b => b.onclick = () => { frame.fit = b.dataset.f; paintFrame(); save(); });
+$('#safe').addEventListener('change', e => { frame.safe = e.target.checked; save(); });
+$('#mirror').addEventListener('change', e => {
+  if (cur < 0){ e.target.checked = false; msg('เพิ่มวิดีโอก่อน แล้วค่อยติ๊กกลับด้าน'); return; }
+  const on = e.target.checked;
+  if ($('#mirrorAll').checked) items.forEach(it => { it.mirror = on; it.blob = null; it.saved = false; it.status = 'พร้อม'; });
+  else { items[cur].mirror = on; items[cur].blob = null; items[cur].saved = false; items[cur].status = 'พร้อม'; }
+  drawList();
+});
+$('#mirrorAll').addEventListener('change', e => { if (e.target.checked && cur >= 0){ const on = $('#mirror').checked; items.forEach(it => it.mirror = on); drawList(); } });
+paintFrame();
+syncControls();
+render();
+})();
+</script>
+
+
+</body></html>
